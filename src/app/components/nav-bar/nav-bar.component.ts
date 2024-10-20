@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,17 +6,12 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css'] // Cambié "styleUrl" por "styleUrls" (plural).
+  styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent {
-  isLoggedIn = false;  // Para manejar el estado de sesión.
-  isHovered = false; // Para manejar el estado de hover.
+  isLoggedIn = false;
 
   toggleSession() {
     this.isLoggedIn = !this.isLoggedIn;
-  }
-
-  toggleHover() {
-    this.isHovered = !this.isHovered;
   }
 }
