@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary-color: #6fa7a2;
+  --secondary-color: #dcefee;
+}
+
 
 html, body {
     height: 100%;
@@ -12,8 +17,11 @@ html, body {
   }
 
   body {
-    background-color: #dcefee;
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
   }
+
 
 
 

@@ -1,0 +1,41 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+app-nav-bar {
+  flex: 0 0 auto;
+}
+
+app-hero-section {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+app-footer {
+  flex: 0 0 auto;
+}
+
+/* Explicación:
+ *
+ * 1. app-nav-bar:
+ *    - flex: 0 0 auto; significa que el elemento no crecerá ni se encogerá,
+ *      manteniendo su tamaño original. Esto es típico para barras de navegación
+ *      que tienen un tamaño fijo.
+ *
+ * 2. app-hero-section:
+ *    - flex: 1 0 auto; permite que este elemento crezca para llenar el espacio
+ *      disponible, pero no se encogerá más allá de su tamaño base.
+ *    - display: flex; y flex-direction: column; hacen que los elementos internos
+ *      de la sección hero se apilen verticalmente.
+ *
+ * 3. app-footer:
+ *    - flex: 0 0 auto; al igual que la barra de navegación, el pie de página
+ *      mantendrá su tamaño original sin crecer ni encogerse.
+ *
+ * Esta estructura asegura que la sección hero ocupe todo el espacio disponible
+ * entre la barra de navegación y el pie de página, creando un diseño de página
+ * completa y flexible.
+ */
