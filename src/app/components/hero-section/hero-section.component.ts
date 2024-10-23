@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./hero-section.component.css']
 })
 export class HeroSectionComponent {
-  backgroundImage: string = 'assets/hero-background.jpg';
+  backgroundImage: string = 'src/assets/hero.jpg';
   title: string = 'Welcome to Our Physiotherapy Clinic';
   subtitle: string = 'Expert care for your physical well-being';
   ctaText: string = 'Book an Appointment';
