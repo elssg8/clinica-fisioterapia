@@ -9,27 +9,26 @@
 
           <!-- Dropdown con hover -->
           <li class="text-center group relative">
-            <a href="#" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Nosotros</a>
+            <a href="#" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Nosotros</a>
             <!-- Lista del Dropdown, visible al hacer hover -->
-            <ul class="absolute hidden bg-[var(--primary-color)] shadow-lg group-hover:block z-10">
-              <li>
-                <a href="#" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Account settings</a>
-              </li>
-              <li>
-                <a href="#" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Support</a>
-              </li>
-              <li>
-                <a href="#" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">License</a>
+            <ul class="absolute hidden bg-[var(--primary-color)] shadow-lg group-hover:block z-50">
+              <li *ngFor="let item of nosotrosItems">
+                <a href="#"
+                   class="block py-2 lg:py-2 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl"
+                   (mouseenter)="showModal(item)"
+                   (mouseleave)="hideModal()">
+                  {{ item.title }}
+                </a>
               </li>
             </ul>
           </li>
 
           <!-- Otros ítems del menú -->
-          <li class="text-center"><a href="#" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Services</a></li>
-          <li class="text-center"><a href="#" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">About Us</a></li>
-          <li class="text-center"><a href="#" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Contact</a></li>
+          <li class="text-center"><a href="#" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Servicios</a></li>
+          <li class="text-center"><a href="#" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Agendar cita</a></li>
+          <li class="text-center"><a href="#" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[135px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] text-sm sm:text-base md:text-lg lg:text-xl">Contactanos</a></li>
           <li class="text-center">
-            <a (click)="toggleSession()" class="block py-2 lg:py-4 text-white font-semibold tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[180px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] hover:bg-gray-100 cursor-pointer text-sm sm:text-base md:text-lg lg:text-xl">
+            <a (click)="toggleSession()" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-[150px] sm:w-[100px] md:w-[180px] lg:w-[200px] xl:w-[230px] 2xl:w-[300px] hover:bg-gray-100 cursor-pointer text-sm sm:text-base md:text-lg lg:text-xl">
               <i class="fa-solid fa-user px-2"></i>
               {{ isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión' }}
             </a>
@@ -38,3 +37,15 @@
       </div>
     </div>
   </nav>
+
+  <!-- Modal -->
+<div *ngIf="activeModal"
+     class="fixed top-[var(--nav-height)] w-full h-full flex items-center justify-center z-10 object-cover bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm transition-opacity duration-300 ease-in-out"
+     (mouseenter)="showModal(activeModal)"
+     (mouseleave)="hideModal()">
+  <div class="bg-[var(--primary-color)] p-6 shadow-xl w-[600px] h-[300px]">
+    <h2 class="text-2xl font-bold mb-4">{{ activeModal.title }}</h2>
+    <p>{{ activeModal.content }}</p>
+  </div>
+</div>
+

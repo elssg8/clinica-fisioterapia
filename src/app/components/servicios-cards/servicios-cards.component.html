@@ -1,0 +1,149 @@
+
+<div class="flex justify-between max-w-[1200px] mx-auto">
+  <div class="w-[32%]" *ngFor="let columna of [0, 1, 2]">
+    <!-- Este código representa una tarjeta de servicio en el componente de servicios -->
+    <div class="mb-5 relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] group cursor-pointer"
+         *ngFor="let imagen of imagenes | slice:(columna*4):((columna+1)*4)"
+         (click)="abrirModal(imagen)">
+      <img
+        ngSrc={{imagen.url}}
+        alt={{imagen.titulo}}
+        width="400"
+        height="300"
+        priority
+        class="w-full h-auto block"
+      >
+      <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2.5 transform translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
+        <h3>{{ imagen.titulo }}</h3>
+        <p>{{ imagen.descripcion }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-[1500px] mx-auto">
+  <div class="grid gap-4">
+      <div class="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] group cursor-pointer h-[268px]"
+      (click)="abrirModal(imagenes[0])">
+          <img
+            ngSrc={{imagenes[0].url}}
+            alt={{imagenes[0].titulo}}
+            width="262"
+            height="180"
+            priority
+            class="w-full h-full rounded-lg object-cover transition-all duration-300 group-hover:h-[calc(100%-66px)]"
+          >
+          <div class="h-[68px] absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2.5 transform translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
+            <h3>{{ imagenes[0].titulo }}</h3>
+            <p>{{ imagenes[0].descripcion }}</p>
+          </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] group cursor-pointer h-[268px]"
+      (click)="abrirModal(imagenes[1])">
+          <img
+            ngSrc={{imagenes[1].url}}
+            alt={{imagenes[1].titulo}}
+            width="1"
+            height="1"
+            priority
+            class="w-full h-full rounded-lg object-cover transition-all duration-300 group-hover:h-[calc(100%-66px)]"
+          >
+          <div class="h-[68px] absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2.5 transform translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
+            <h3>{{ imagenes[1].titulo }}</h3>
+            <p>{{ imagenes[1].descripcion }}</p>
+          </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] group cursor-pointer h-[544px]"
+      (click)="abrirModal(imagenes[2])">
+          <img
+            ngSrc={{imagenes[2].url}}
+            alt={{imagenes[2].titulo}}
+            width="262"
+            height="180"
+            priority
+            class="w-full h-full rounded-lg object-cover transition-all duration-300 group-hover:h-[calc(100%-66px)]"
+          >
+          <div class="h-[68px] absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2.5 transform translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
+            <h3>{{ imagenes[2].titulo }}</h3>
+            <p>{{ imagenes[2].descripcion }}</p>
+          </div>
+      </div>
+
+      <div class="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] group cursor-pointer h-[268px]"
+      (click)="abrirModal(imagenes[3])">
+          <img
+            ngSrc={{imagenes[3].url}}
+            alt={{imagenes[3].titulo}}
+            width="262"
+            height="180"
+            priority
+            class="w-full h-full rounded-lg object-cover transition-all duration-300 group-hover:h-[calc(100%-66px)]"
+          >
+          <div class="h-[68px] absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2.5 transform translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
+            <h3>{{ imagenes[3].titulo }}</h3>
+            <p>{{ imagenes[3].descripcion }}</p>
+          </div>
+      </div>
+  </div>
+  <div class="grid gap-4">
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg" alt="">
+      </div>
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg" alt="">
+      </div>
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg" alt="">
+      </div>
+  </div>
+  <div class="grid gap-4">
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg" alt="">
+      </div>
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg" alt="">
+      </div>
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg" alt="">
+      </div>
+  </div>
+  <div class="grid gap-4">
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg" alt="">
+      </div>
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg" alt="">
+      </div>
+      <div>
+          <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg" alt="">
+      </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div *ngIf="modalAbierto" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full relative">
+    <button (click)="cerrarModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <h2 class="text-2xl font-bold mb-4">{{ servicioSeleccionado?.titulo }}</h2>
+    <img
+      ngSrc={{servicioSeleccionado?.url}}
+      alt={{servicioSeleccionado?.titulo}}
+      width="400"
+      height="300"
+      class="mb-4 rounded w-full h-[300px] object-cover"
+    >
+    <p class="mb-4">{{ servicioSeleccionado?.informacionAdicional }}</p>
+    <button (click)="agendarCita()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+      Agendar Cita
+    </button>
+  </div>
+</div>

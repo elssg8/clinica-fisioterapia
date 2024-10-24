@@ -1,1 +1,27 @@
-<p>servicios works!</p>
+<div class="flex items-center justify-center w-full overflow-hidden" #carousel>
+  <button class="text-2xl p-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" (click)="prev()" [disabled]="currentIndex === 0"><i class="fa-solid fa-arrow-left m-2"></i></button>
+
+  <div class="w-full overflow-hidden">
+    <div class="flex transition-transform duration-500 ease-in-out space-x-4 my-4" [style.transform]="'translateX(' + (-currentIndex * 25) + '%)'">
+      <div class="flex-[0_0_24%] h-[400px] bg-cover bg-center relative flex items-center justify-center text-white text-center overflow-hidden group" *ngFor="let servicio of servicios">
+        <img
+          ngSrc="{{ servicio.imagen }}"
+          alt="{{ servicio.titulo }}"
+          fill
+          priority
+          class="object-cover"
+        />
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <p class="text-white text-center text-xl p-4">
+            {{ servicio.descripcion }}
+          </p>
+        </div>
+        <h3 class="absolute bottom-0 left-0 right-0 bg-[var(--primary-color)] bg-opacity-50 text-white py-2 text-xl font-bold">
+          {{ servicio.titulo }}
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <button class="text-2xl p-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" (click)="next()" [disabled]="currentIndex === servicios.length - 4"><i class="fa-solid fa-arrow-right m-2"></i></button>
+</div>
