@@ -1,26 +1,4 @@
 
-<div class="flex justify-between max-w-[1200px] mx-auto">
-  <div class="w-[32%]" *ngFor="let columna of [0, 1, 2]">
-    <!-- Este código representa una tarjeta de servicio en el componente de servicios -->
-    <div class="mb-5 relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] group cursor-pointer"
-         *ngFor="let imagen of imagenes | slice:(columna*4):((columna+1)*4)"
-         (click)="abrirModal(imagen)">
-      <img
-        ngSrc={{imagen.url}}
-        alt={{imagen.titulo}}
-        width="400"
-        height="300"
-        priority
-        class="w-full h-auto block"
-      >
-      <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2.5 transform translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
-        <h3>{{ imagen.titulo }}</h3>
-        <p>{{ imagen.descripcion }}</p>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-[1500px] mx-auto">
