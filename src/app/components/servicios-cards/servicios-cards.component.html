@@ -1,10 +1,10 @@
 
 <div class="grid grid-cols-4 gap-4 max-w-[1400px] mx-auto grid-rows-auto">
-  <div *ngFor="let imagen of imagenes" [class]="imagen.class" class="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] group cursor-pointer" (click)="abrirModal(imagen)">
-    <img [ngSrc]="imagen.url" [alt]="imagen.titulo" width="524" height="360" priority class="w-full h-full rounded-lg object-cover transition-all duration-300 group-hover:h-[calc(100%-66px)]">
-    <div class="h-[68px] absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2.5 transform translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
-      <h3>{{ imagen.titulo }}</h3>
-      <p>{{ imagen.descripcion }}</p>
+  <div *ngFor="let imagen of imagenes" [class]="imagen.class" class="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 ease-in-out hover:translate-y-[-5px] hover:shadow-[var(--mint-color)] hover:shadow-2xl hover:border-4 hover:border-[var(--lila-color)] group cursor-pointer" (click)="abrirModal(imagen)">
+    <img [ngSrc]="imagen.url" [alt]="imagen.titulo" width="524" height="360" priority class="w-full h-full object-cover">
+    <div class="h-auto absolute flex flex-row flex-wrap justify-between items-center bottom-0 left-0 right-0 backdrop-blur-md bg-white/60 border border-white/30 text-black p-2.5 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100 shadow-lg">
+      <h3 class="font-poiret-one font-bold text-4xl pb-2 mr-4">{{ imagen.titulo }}</h3>
+      <p class="font-poiret-one text-lg">Haz click para más información</p>
     </div>
   </div>
 </div>
@@ -12,14 +12,14 @@
 
 
 <!-- Modal -->
-<div *ngIf="modalAbierto" class="fixed inset-0 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg flex items-center justify-center z-50">
+<div *ngIf="modalAbierto" class="fixed inset-0 bg-black bg-opacity-50 backdrop-filter backdrop-blur-lg flex items-center justify-center z-50">
   <div class="bg-gray-100 p-6 rounded-lg shadow-xl w-auto relative">
     <button (click)="cerrarModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
     </button>
-    <h2 class="text-2xl font-bold mb-4">{{ servicioSeleccionado?.titulo }}</h2>
+    <h2 class="text-4xl font-extrabold mb-4 font-poiret-one">{{ servicioSeleccionado?.titulo }}</h2>
     <img
       ngSrc={{servicioSeleccionado?.url}}
       alt={{servicioSeleccionado?.titulo}}
@@ -28,7 +28,7 @@
       class="mb-4 rounded-md w-[600px] h-[500px] object-cover"
     >
     <p class="mb-4">{{ servicioSeleccionado?.informacionAdicional }}</p>
-    <button (click)="agendarCita()" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+    <button (click)="agendarCita()" class="bg-[var(--agendar-color)] hover:bg-[var(--agendar-hover-color)] text-white font-bold py-2 px-4 rounded">
       Agendar Cita
     </button>
   </div>

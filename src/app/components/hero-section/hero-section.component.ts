@@ -11,7 +11,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 })
 export class HeroSectionComponent {
   backgroundImage: string = 'images/fisio.jpg';
-  title: string = 'DEUS FISIOTERAPIA';
+  title: string = 'Deus Fisioterapia';
   subtitle: string = 'Expertos en el cuidado de tu salud';
   ctaText: string = 'Ver más';
 
