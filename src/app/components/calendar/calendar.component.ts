@@ -125,7 +125,7 @@ export class CalendarComponent implements OnInit {
   }
 
   openAppointmentModal(day: any) {
-    this.selectedDate = new Date(day.date);
+    this.selectedDate = new Date(day.date + 'T00:00:00');
     this.showModal = true;
   }
 
