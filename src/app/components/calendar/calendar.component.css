@@ -1,0 +1,13 @@
+.today {
+  border: 2px solid black;
+
+  time {
+    font-weight: 800;
+    font-size: 3rem;
+  }
+}
+
+.current-month {
+  opacity: 0.2;
+  pointer-events: none;
+}
