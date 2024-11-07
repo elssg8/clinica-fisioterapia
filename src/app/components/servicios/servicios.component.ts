@@ -1,6 +1,11 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 
+interface ImagenServicio {
+  url: string;
+  titulo: string;
+  descripcion: string;
+}
 
 @Component({
   selector: 'app-servicios',
@@ -9,96 +14,96 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
   templateUrl: './servicios.component.html',
   styleUrl: './servicios.component.css'
 })
+
 export class ServiciosComponent {
-  servicios = [
+  @ViewChild('carousel') carousel!: ElementRef;
+  currentIndex = 0;
+  servicioSeleccionado: ImagenServicio | null = null;
+
+  imagenes: ImagenServicio[] = [
     {
-      titulo: 'Estimulación Temprana',
-      imagen: 'images/babies.jpg',
-      descripcion: 'La estimulación temprana es un conjunto de actividades que se realizan en las primeras etapas de la vida, con el objetivo de promover el desarrollo físico, mental y emocional del niño. Estas actividades suelen ser supervisadas por profesionales de la salud, como pediatras, psicólogos y terapeutas.'
-    },
-    {
-      titulo: 'Neurorehabilitación',
-      imagen: 'images/neuro.jpg',
-      descripcion: 'La neurorehabilitación es un conjunto de actividades que se realizan para ayudar a las personas que han sufrido un accidente cerebrovascular o una enfermedad neurológica a recuperar sus habilidades y funciones. Estas actividades suelen ser supervisadas por profesionales de la salud, como neurologos, psicólogos y terapeutas.'
-    },
-    {
-      titulo: 'Esguinces',
-      imagen: 'assets/images/esguinces.jpg',
-      descripcion: 'Los esguinces son lesiones comunes que afectan a los músculos y ligamentos. Pueden ser causados por una rápida y fuerte extensión o rotación del miembro afectado, como por ejemplo, un golpe o una caída. Los esguinces pueden ser leves, moderados o graves, dependiendo de la severidad de la lesión.'
-    },
-    {
+      url: 'images/fracturas.jpg',
       titulo: 'Fracturas',
-      imagen: 'assets/images/fracturas.jpg',
-      descripcion: 'Las fracturas son lesiones que afectan a los huesos. Pueden ser causadas por una fuerza externa, como una caída, un golpe o una fuerza repentina. Las fracturas pueden ser simples, con un solo fragmento de hueso roto, o complejas, con múltiples fragmentos de hueso roto.'
+      descripcion: 'Servicio de fisioterapia para fracturas.',
     },
     {
-      titulo: 'Dolor de espalda',
-      imagen: 'images/backache.jpg',
-      descripcion: 'Los dolores de espalda son una variedad de dolores que afectan a la zona media y baja de la espalda. Pueden ser causados por una variedad de factores, como una mala postura, una lesión, una enfermedad o una herida.'
+      url: 'images/esguince.png',
+      titulo: 'Esguinces',
+      descripcion: 'Servicio de fisioterapia para esguinces.',
     },
     {
-      titulo: 'Dolor de rodilla',
-      imagen: 'images/knee-pain.jpg',
-      descripcion: 'El dolor de rodilla es una variedad de dolores que afectan a la rodilla. Pueden ser causados por una variedad de factores, como una lesión, una enfermedad o una herida.'
+      url: 'images/pie-plano.jpg',
+      titulo: 'Pie Plano',
+      descripcion: 'Servicio de fisioterapia para pie plano.',
     },
     {
-      titulo: 'Paralisis cerebral',
-      imagen: 'assets/images/paralisis-cerebral.jpg',
-      descripcion: 'La parálisis cerebral es una condición médica que afecta a la capacidad de movimiento y coordinación del cuerpo. Puede ser causada por una variedad de factores, como una lesión cerebral, una enfermedad neurológica o una herida.'
-    },
-    {
-      titulo: 'Lesiones nerviosas',
-      imagen: 'assets/images/lesiones-nerviosas.jpg',
-      descripcion: 'Las lesiones nerviosas son lesiones que afectan a los nervios. Pueden ser causadas por una variedad de factores, como una lesión, una enfermedad o una herida.'
-    },
-    {
-      titulo: 'Evento vascular cerebral',
-      imagen: 'assets/images/evento-vascular-cerebral.jpg',
-      descripcion: 'Los eventos vasculares cerebrales son eventos que afectan a los vasos sanguíneos del cerebro. Pueden ser causados por una variedad de factores, como una lesión, una enfermedad o una herida.'
-    },
-    {
-      titulo: 'Reducción de grasa localizada',
-      imagen: 'assets/images/reduccion-grasa-localizada.jpg',
-      descripcion: 'La reducción de grasa localizada es un conjunto de actividades que se realizan para ayudar a las personas a reducir la grasa localizada en una zona del cuerpo. Puede ser causada por una variedad de factores, como una dieta, una actividad física y una terapia.'
-    },
-    {
-      titulo: 'Masaje relajante',
-      imagen: 'assets/images/masaje-relajante.jpg',
-      descripcion: 'El masaje relajante es un tipo de masaje que se realiza para ayudar a las personas a reducir el estrés y la ansiedad. Puede ser causado por una variedad de factores, como una dieta, una actividad física y una terapia.'
-    },
-    {
-      titulo: 'Masaje descontracturante',
-      imagen: 'assets/images/masaje-descontracturante.jpg',
-      descripcion: 'El masaje descontracturante es un tipo de masaje que se realiza para ayudar a las personas a reducir el estrés y la ansiedad. Puede ser causado por una variedad de factores, como una dieta, una actividad física y una terapia.'
-    },
-    {
-      titulo: 'Pie plano',
-      imagen: 'assets/images/pie-plano.jpg',
-      descripcion: 'El pie plano es una condición médica que afecta a la forma y la función del pie. Puede ser causada por una variedad de factores, como una lesión, una enfermedad o una herida.'
-    },
-    {
-      titulo: 'Tratamiento postcovid',
-      imagen: 'assets/images/tratamiento-postcovid.jpg',
-      descripcion: 'El tratamiento postcovid es un conjunto de actividades que se realizan para ayudar a las personas que han sufrido COVID-19 a recuperar sus habilidades y funciones. Puede ser causado por una variedad de factores, como una dieta, una actividad física y una terapia.'
-    },
-    {
+      url: 'images/tendinitis.jpg',
       titulo: 'Tendinitis',
-      imagen: 'assets/images/tendinitis.jpg',
-      descripcion: 'La tendinitis es una condición médica que afecta a los tendones. Puede ser causada por una variedad de factores, como una lesión, una enfermedad o una herida.'
+      descripcion: 'Servicio de fisioterapia para la tendinitis.',
     },
     {
-      titulo: 'Túnel del carpo',
-      imagen: 'assets/images/tunel-carpo.jpg',
-      descripcion: 'El túnel del carpo es una condición médica que afecta a la zona del carpo. Puede ser causada por una variedad de factores, como una lesión, una enfermedad o una herida.'
+      url: 'images/tratamiento-post-covid.jpg',
+      titulo: 'Tratamiento Post Covid',
+      descripcion: 'Servicio de fisioterapia para el tratamiento post covid.',
+    },
+    {
+      url: 'images/evento-cerebro-vascular-2.jpg',
+      titulo: 'Evento cerebro vascular',
+      descripcion: 'Servicio de fisioterapia para el evento cerebro vascular.',
+    },
+    {
+      url: 'images/estimulacion-temprana.jpg',
+      titulo: 'Estimulación temprana',
+      descripcion: 'Servicio de fisioterapia para la estimulación temprana.',
+    },
+    {
+      url: 'images/neurorehabilitacion.jpg',
+      titulo: 'Neurorehabilitación',
+      descripcion: 'Servicio de fisioterapia para la neurorehabilitación.',
+    },
+    {
+      url: 'images/tratamiento-grasa.jpg',
+      titulo: 'Tratamiento de grasa localizada',
+      descripcion: 'Servicio de fisioterapia para el tratamiento de grasa localizada.',
+    },
+    {
+      url: 'images/tunel-carpiano.jpg',
+      titulo: 'Tunel carpiano',
+      descripcion: 'Servicio de fisioterapia para el tunel carpiano.',
+    },
+    {
+      url: 'images/lesion-nerviosa.jpg',
+      titulo: 'Lesiones Nerviosas',
+      descripcion: 'Servicio de fisioterapia para lesiones nerviosas.',
+    },
+    {
+      url: 'images/masaje-relajante.jpg',
+      titulo: 'Masaje Relajante',
+      descripcion: 'Servicio de fisioterapia para el masaje relajante.',
+    },
+    {
+      url: 'images/dolor-espalda.webp',
+      titulo: 'Dolor de espalda',
+      descripcion: 'Servicio de fisioterapia para el dolor de espalda.',
+    },
+    {
+      url: 'images/paralisis-cerebral.jpg',
+      titulo: 'Paralisis Cerebral',
+      descripcion: 'Servicio de fisioterapia para la paralisis cerebral.',
+    },
+    {
+      url: 'images/incontinencia-urinaria.jpg',
+      titulo: 'Incontinencia Urinaria',
+      descripcion: 'Servicio de fisioterapia para la incontenencia urinaria.',
+    },
+    {
+      url: 'images/masaje-descontracturante.jpg',
+      titulo: 'Masaje Descontracturante',
+      descripcion: 'Servicio de fisioterapia para el masaje descontracturante.',
     }
   ];
 
-  currentIndex = 0;
-
-  @ViewChild('carousel')
-  carousel!: ElementRef;
-
-  @HostListener('wheel', ['$event'])
+  /* @HostListener('wheel', ['$event'])
   onWheel(event: WheelEvent) {
     if (this.isMouseOverCarousel(event)) {
       event.preventDefault();
@@ -107,6 +112,16 @@ export class ServiciosComponent {
       } else {
         this.prev();
       }
+    }
+  } */
+
+  @HostListener('document:keyup', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'ArrowRight') {
+      this.next();
+    }
+    if (event.key === 'ArrowLeft') {
+      this.prev();
     }
   }
 
@@ -121,10 +136,20 @@ export class ServiciosComponent {
   }
 
   prev() {
-    this.currentIndex = Math.max(this.currentIndex - 1, 0);
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
   }
 
   next() {
-    this.currentIndex = Math.min(this.currentIndex + 1, this.servicios.length - 4);
+    if (this.currentIndex < this.imagenes.length - 1) {
+      this.currentIndex++;
+    }
   }
+
+  agendarCita() {
+    // Implementa la lógica para agendar cita aquí
+    console.log('Agendar cita para:', this.servicioSeleccionado?.titulo);
+  }
+
 }

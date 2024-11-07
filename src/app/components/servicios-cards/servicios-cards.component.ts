@@ -21,6 +21,8 @@ export class ServiciosCardsComponent {
 
   alto_lg = 'h-[552px]';
   alto_md = 'h-[268px]';
+  modalAbierto = false;
+  servicioSeleccionado: ImagenServicio | null = null;
 
   imagenes: ImagenServicio[] = [
     {
@@ -137,8 +139,7 @@ export class ServiciosCardsComponent {
     }
   ];
 
-  modalAbierto = false;
-  servicioSeleccionado: ImagenServicio | null = null;
+
 
   abrirModal(servicio: ImagenServicio) {
     this.servicioSeleccionado = servicio;

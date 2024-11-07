@@ -1,27 +1,90 @@
-<div class="flex items-center justify-center w-full overflow-hidden" #carousel>
-  <button class="text-2xl p-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" (click)="prev()" [disabled]="currentIndex === 0"><i class="fa-solid fa-arrow-left m-2"></i></button>
+<div class="text-xl font-bold m-5 text-center">Usar las teclas de flecha para navegar entre los servicios</div>
 
-  <div class="w-full overflow-hidden">
-    <div class="flex transition-transform duration-500 ease-in-out space-x-4 my-4" [style.transform]="'translateX(' + (-currentIndex * 25) + '%)'">
-      <div class="flex-[0_0_24%] h-[400px] bg-cover bg-center relative flex items-center justify-center text-white text-center overflow-hidden group" *ngFor="let servicio of servicios">
-        <img
-          ngSrc="{{ servicio.imagen }}"
-          alt="{{ servicio.titulo }}"
-          fill
-          priority
-          class="object-cover"
-        />
-        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
-          <p class="text-white text-center text-xl p-4">
-            {{ servicio.descripcion }}
-          </p>
-        </div>
-        <h3 class="absolute bottom-0 left-0 right-0 bg-[var(--primary-color)] bg-opacity-50 text-white py-2 text-xl font-bold">
-          {{ servicio.titulo }}
-        </h3>
-      </div>
+<div class="flex justify-center gap-2 mb-4">
+    <div *ngFor="let servicio of imagenes; let i = index"
+         (click)="currentIndex = i"
+         class="w-3 h-3 rounded-full cursor-pointer"
+         [ngClass]="{'bg-[var(--agendar-color)]': currentIndex === i, 'bg-gray-300': currentIndex !== i}">
     </div>
+</div>
+
+<div class="border-2 rounded-lg mx-auto m-5 bg-white w-[800px]">
+    <div class="flex p-2 border-b select-none">
+        <div class="text-gray-800 w-full pl-3 font-semibold my-auto">{{ imagenes[currentIndex].titulo }}</div>
+        <div class="ml-auto flex text-gray-600 mr-1">
+            <svg (click)="prev()" [class.cursor-not-allowed]="currentIndex === 0" class="w-7 border-2 rounded-l-lg p-1 cursor-pointer border-r-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <svg (click)="next()" [class.cursor-not-allowed]="currentIndex === imagenes.length - 1" class="w-7 border-2 rounded-r-lg p-1 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="w-full overflow-hidden">
+        <div class="relative transition-all duration-300 ease-in-out shadow-xl h-full w-0 flex" [style.right.px]="currentIndex * 800">
+            <div *ngFor="let servicio of imagenes" class="flex-none h-full" [style.width.px]="800">
+                <div class="flex w-full p-4">
+                    <div class="w-[524px] h-[360px] my-auto">
+                        <img class="w-[524px] h-[360px] object-cover rounded-md" [ngSrc]="servicio.url" [alt]="servicio.titulo" width="524" height="360" priority>
+                    </div>
+                    <div class="flex flex-col w-full p-4 align-top">
+                        <div class="text-3xl font-bold mb-4">{{ servicio.titulo }}</div>
+                        <div class="text-lg mb-4">{{ servicio.descripcion }}</div>
+                        <button (click)="agendarCita()" class="bg-[var(--agendar-color)] hover:bg-[var(--agendar-hover-color)] text-white font-bold py-2 px-4 rounded self-end mt-auto">
+                          Agendar Cita
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Carousel -->
+<div class="w-[1200px] mx-auto bg-gray-200">
+  <!-- Carousel Body -->
+  <div class="relative rounded-lg block md:flex items-center bg-gray-100 shadow-xl" style="min-height: 19rem;">
+    <div class="relative w-full md:w-2/5 h-full overflow-hidden rounded-t-lg md:rounded-t-none md:rounded-l-lg" style="min-height: 19rem;">
+      <img class="absolute inset-0 w-full h-full object-cover object-center" [ngSrc]="imagenes[currentIndex].url" [alt]="imagenes[currentIndex].titulo" width="800" height="600" priority>
+    </div>
+    <div class="w-full md:w-3/5 h-full flex items-center bg-gray-100 rounded-lg">
+      <div class="p-12 md:pr-24 md:pl-16 md:py-12">
+        <h2 class="text-4xl font-bold mb-4 font-poiret-one">{{imagenes[currentIndex].titulo}}</h2>
+        <p class="text-gray-600">{{imagenes[currentIndex].descripcion}}</p>
+        <button (click)="agendarCita()" class="mt-6 bg-[var(--agendar-color)] hover:bg-[var(--agendar-hover-color)] text-white font-bold py-2 px-4 rounded">
+          Agendar Cita
+        </button>
+      </div>
+      <svg class="hidden md:block absolute inset-y-0 h-full w-24 fill-current text-gray-100 -ml-12" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <polygon points="50,0 100,0 50,100 0,100" />
+      </svg>
+    </div>
+    <button
+      (click)="prev()"
+      [class.cursor-not-allowed]="currentIndex === 0"
+      class="absolute top-0 mt-32 left-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-[var(--agendar-color)] hover:text-[var(--agendar-hover-color)] -ml-6 focus:outline-none focus:shadow-outline">
+      <span class="block" style="transform: scale(-1);">&#x279c;</span>
+    </button>
+    <button
+      (click)="next()"
+      [class.cursor-not-allowed]="currentIndex === imagenes.length - 1"
+      class="absolute top-0 mt-32 right-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-[var(--agendar-color)] hover:text-[var(--agendar-hover-color)] -mr-6 focus:outline-none focus:shadow-outline">
+      <span class="block">&#x279c;</span>
+    </button>
   </div>
 
-  <button class="text-2xl p-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" (click)="next()" [disabled]="currentIndex === servicios.length - 4"><i class="fa-solid fa-arrow-right m-2"></i></button>
+  <!-- Carousel Dots -->
+  <div class="flex items-center pt-5 justify-center gap-2">
+    <button
+      *ngFor="let servicio of imagenes; let i = index"
+      (click)="currentIndex = i"
+      class="w-3 h-3 rounded-full cursor-pointer"
+      [ngClass]="{'bg-[var(--agendar-color)]': currentIndex === i, 'bg-gray-300': currentIndex !== i}">
+    </button>
+  </div>
+
 </div>
+
