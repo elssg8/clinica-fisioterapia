@@ -62,7 +62,7 @@ export class NavBarComponent {
   scrollToServices() {
     const serviciosElement = document.getElementById('servicios');
     if (serviciosElement) {
-      const offset = serviciosElement.offsetTop - 40; // Ajuste por el margen
+      const offset = serviciosElement.offsetTop; // Ajuste por el margen
       window.scrollTo({
         top: offset,
         behavior: 'smooth'

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AppointmentService } from '../../shared/appointment.service';
 
 
 interface CalendarDay {
@@ -33,13 +34,38 @@ export class CalendarComponent implements OnInit {
     // ... añadir más días festivos según necesites
   };
 
+  servicios: string[] = [
+    'Fracturas',
+    'Esguinces',
+    'Pie Plano',
+    'Tendinitis',
+    'Tratamiento Post Covid',
+    'Evento cerebro vascular',
+    'Estimulación temprana',
+    'Neurorehabilitación',
+    'Tratamiento de grasa localizada',
+    'Masaje Relajante',
+    'Dolor de espalda',
+    'Paralisis Cerebral',
+    'Incontinencia Urinaria',
+    'Masaje Descontracturante'
+  ];
+
   appointmentForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     time: new FormControl('', [Validators.required]),
     service: new FormControl('', [Validators.required]),
     date: new FormControl('', [Validators.required])
   });
-window: any;
+  window: any;
+
+  constructor(private appointmentService: AppointmentService) {
+    this.appointmentService.selectedService$.subscribe(service => {
+      if (service) {
+        this.appointmentForm.get('service')?.setValue(service);
+      }
+    });
+  }
 
   ngOnInit() {
     this.currentMonth = this.currentDate.getMonth();
@@ -102,8 +128,8 @@ window: any;
   isToday(date: Date): boolean {
     const today = new Date();
     return date.getDate() === today.getDate() &&
-           date.getMonth() === today.getMonth() &&
-           date.getFullYear() === today.getFullYear();
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear();
   }
 
   previousMonth() {

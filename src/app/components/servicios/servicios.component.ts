@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-
+import { AppointmentService } from '../../shared/appointment.service';
 interface ImagenServicio {
   url: string;
   titulo: string;
@@ -19,6 +19,8 @@ export class ServiciosComponent {
   @ViewChild('carousel') carousel!: ElementRef;
   currentIndex = 0;
   servicioSeleccionado: ImagenServicio | null = null;
+
+  constructor(private appointmentService: AppointmentService) { }
 
   imagenes: ImagenServicio[] = [
     {
@@ -148,8 +150,16 @@ export class ServiciosComponent {
   }
 
   agendarCita() {
-    // Implementa la lógica para agendar cita aquí
-    console.log('Agendar cita para:', this.servicioSeleccionado?.titulo);
+    this.appointmentService.setSelectedService(this.imagenes[this.currentIndex].titulo);
+    console.log('Agendar cita para:', this.imagenes[this.currentIndex].titulo);
+    const calendarComponent = document.getElementById('calendar');
+    if (calendarComponent) {
+      const offset = calendarComponent.offsetTop - 40; // Ajuste por el margen
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      });
+    }
   }
 
 }
