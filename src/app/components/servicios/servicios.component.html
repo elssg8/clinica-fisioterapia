@@ -1,6 +1,6 @@
-<div class="text-xl font-bold m-5 text-center">Usar las teclas de flecha para navegar entre los servicios</div>
+<div class="text-xl font-bold m-5 text-center pt-10">Usar las teclas de flecha para navegar entre los servicios</div>
 
-<div class="flex justify-center gap-2 mb-4">
+<div class="flex justify-center gap-2">
     <div *ngFor="let servicio of imagenes; let i = index"
          (click)="currentIndex = i"
          class="w-3 h-3 rounded-full cursor-pointer"
@@ -44,7 +44,7 @@
 
 
 <!-- Carousel -->
-<div class="w-[1200px] mx-auto bg-gray-200">
+<div class="w-[1200px] mx-auto">
   <!-- Carousel Body -->
   <div class="relative rounded-lg block md:flex items-center bg-gray-100 shadow-xl" style="min-height: 19rem;">
     <div class="relative w-full md:w-2/5 h-full overflow-hidden rounded-t-lg md:rounded-t-none md:rounded-l-lg" style="min-height: 19rem;">

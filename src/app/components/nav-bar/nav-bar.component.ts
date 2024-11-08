@@ -47,4 +47,26 @@ export class NavBarComponent {
   hideModal() {
     this.activeModal = null;
   }
+
+  scrollToCalendar() {
+    const calendarElement = document.getElementById('calendar');
+    if (calendarElement) {
+      const offset = calendarElement.offsetTop - 40; // Ajuste por el margen
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  scrollToServices() {
+    const serviciosElement = document.getElementById('servicios');
+    if (serviciosElement) {
+      const offset = serviciosElement.offsetTop - 40; // Ajuste por el margen
+      window.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      });
+    }
+  }
 }

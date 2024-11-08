@@ -1,72 +1,80 @@
 
-<div class="flex flex-col items-center bg-gradient-to-r from-pink-200 to-blue-200">
-  <div class="flex items-center gap-4 mt-4">
-    <button (click)="previousMonth()" class="px-4 py-2 bg-white/50 rounded-lg hover:bg-white/70">←</button>
-    <h1 class="text-center pb-2 font-extrabold">{{monthName}} {{currentYear}}</h1>
-    <button (click)="nextMonth()" class="px-4 py-2 bg-white/50 rounded-lg hover:bg-white/70">→</button>
+<!-- Formulario para agendar cita -->
+<div class="bg-gray-100 rounded-lg p-4 w-[500px]">
+  <h2 class="text-2xl font-bold mb-4">Agendar Cita - {{appointmentForm.get('date')?.value | date:'d/M/yyyy'}}</h2>
+
+  <form (ngSubmit)="scheduleAppointment()" [formGroup]="appointmentForm">
+    <div class="mb-4">
+      <label class="block mb-2">Nombre completo:</label>
+      <input type="text" formControlName="name" required class="w-full p-2 border rounded bg-gray-200">
+    </div>
+
+    <div class="mb-4">
+      <label class="block mb-2">Servicio:</label>
+      <select formControlName="service" required class="w-full p-2 border rounded bg-gray-200">
+        <option value="Fisioterapia">Fisioterapia</option>
+        <option value="Masaje">Masaje</option>
+        <option value="Terapia Ocupacional">Terapia Ocupacional</option>
+        <option value="Terapia Intensiva">Terapia Intensiva</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block mb-2">Hora:</label>
+      <select formControlName="time" required class="w-full p-2 border rounded bg-gray-200">
+        <option value="09:00">09:00</option>
+        <option value="10:00">10:00</option>
+        <option value="11:00">11:00</option>
+        <option value="12:00">12:00</option>
+        <option value="16:00">16:00</option>
+        <option value="17:00">17:00</option>
+      </select>
+    </div>
+
+    <div class="flex justify-end gap-4">
+      <button type="button" (click)="cancelAppointment()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+        Cancelar
+      </button>
+      <button type="submit"
+        class="px-4 py-2 bg-[var(--agendar-color)] text-white rounded hover:bg-[var(--agendar-hover-color)]">
+        Agendar
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="flex flex-col items-center bg-gradient-to-r from-pink-200 to-blue-200 my-10 rounded-lg">
+  <div class="flex items-center gap-4 mt-2">
+    <button (click)="previousMonth()" class="px-4 py-2 bg-white/50 rounded-lg hover:bg-white/70"><i class="fa-solid fa-arrow-left"></i></button>
+    <h1 class="text-center pb-2 font-extrabold text-xl">{{monthName}} {{currentYear}}</h1>
+    <button (click)="nextMonth()" class="px-4 py-2 bg-white/50 rounded-lg hover:bg-white/70"><i class="fa-solid fa-arrow-right"></i></button>
   </div>
 
   <div class="grid grid-cols-7 font-bold text-center w-full">
-    <div class="w-40 p-4 m-1">Domingo</div>
-    <div class="w-40 p-4 m-1">Lunes</div>
-    <div class="w-40 p-4 m-1">Martes</div>
-    <div class="w-40 p-4 m-1">Miércoles</div>
-    <div class="w-40 p-4 m-1">Jueves</div>
-    <div class="w-40 p-4 m-1">Viernes</div>
-    <div class="w-40 p-4 m-1">Sábado</div>
+    <div class="w-30 p-1 m-1">Domingo</div>
+    <div class="w-30 p-1 m-1">Lunes</div>
+    <div class="w-30 p-1 m-1">Martes</div>
+    <div class="w-30 p-1 m-1">Miércoles</div>
+    <div class="w-30 p-1 m-1">Jueves</div>
+    <div class="w-30 p-1 m-1">Viernes</div>
+    <div class="w-30 p-1 m-1">Sábado</div>
   </div>
 
   <ul class="grid grid-cols-7 list-none font-merienda">
     <li *ngFor="let day of days"
-      class="flex flex-col transition-all duration-200 ease-in-out cursor-pointer hover:border-2 hover:border-black hover:scale-[1.07] hover:bg-[var(--lila-color)] items-center w-40 h-40 m-1 p-4 font-light text-sm bg-white/25 shadow-lg backdrop-blur-sm rounded-lg border border-white/20"
-      [ngClass]="{'today': day.isToday, 'current-month': !day.isCurrentMonth}"
-      (click)="openAppointmentModal(day)">
-      <time
-        [dateTime]="day.date"
-        class="text-3xl mb-4 font-medium">
+      class="flex flex-col transition-all duration-200 ease-in-out cursor-pointer hover:border-black hover:scale-[1.07] hover:bg-[var(--lila-color)] items-center w-28 h-24 m-1 p-4 font-light text-sm bg-white/25 shadow-lg backdrop-blur-sm rounded-lg border border-white/20"
+      [ngClass]="{'today': day.isToday, 'current-month': !day.isCurrentMonth}" (click)="setDate(day)">
+      <time [dateTime]="day.date" class="text-3xl mb-4 font-medium">
         {{day.day}}
       </time>
-      {{day.holiday}}
+      <div class="flex gap-1">
+        <div class="w-2 h-2 rounded-full bg-[var(--primary-color)]"></div>
+        <div class="w-2 h-2 rounded-full bg-[var(--primary-color)]"></div>
+        <div class="w-2 h-2 rounded-full bg-[var(--primary-color)]"></div>
+      </div>
     </li>
   </ul>
 </div>
 
 
-<!-- Modal para agendar cita -->
-<div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg p-8 max-w-md w-full">
-    <h2 class="text-2xl font-bold mb-4">Agendar Cita - {{selectedDate | date:'d/M/yyyy'}}</h2>
 
-    <form (ngSubmit)="scheduleAppointment()" #appointmentForm="ngForm">
-      <div class="mb-4">
-        <label class="block mb-2">Nombre completo:</label>
-        <input type="text" [(ngModel)]="appointment.name" name="name" required
-          class="w-full p-2 border rounded">
-      </div>
-
-      <div class="mb-4">
-        <label class="block mb-2">Hora:</label>
-        <select [(ngModel)]="appointment.time" name="time" required
-          class="w-full p-2 border rounded">
-          <option value="09:00">09:00</option>
-          <option value="10:00">10:00</option>
-          <option value="11:00">11:00</option>
-          <option value="12:00">12:00</option>
-          <option value="16:00">16:00</option>
-          <option value="17:00">17:00</option>
-        </select>
-      </div>
-
-      <div class="flex justify-end gap-4">
-        <button type="button" (click)="closeModal()"
-          class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
-          Cancelar
-        </button>
-        <button type="submit"
-          class="px-4 py-2 bg-[var(--agendar-color)] text-white rounded hover:bg-[var(--agendar-hover-color)]">
-          Agendar
-        </button>
-      </div>
-    </form>
-  </div>
-</div>

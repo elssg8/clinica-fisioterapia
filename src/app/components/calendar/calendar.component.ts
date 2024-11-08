@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 interface CalendarDay {
   date: string;
@@ -13,7 +14,7 @@ interface CalendarDay {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css'
 })
@@ -23,12 +24,7 @@ export class CalendarComponent implements OnInit {
   currentYear: number = this.currentDate.getFullYear();
   days: CalendarDay[] = [];
   monthName: string = '';
-  showModal = false;
   selectedDate: Date | null = null;
-  appointment = {
-    name: '',
-    time: ''
-  };
 
   // Lista de días festivos - esto podría venir de una API o base de datos
   holidays: Record<string, string> = {
@@ -36,6 +32,14 @@ export class CalendarComponent implements OnInit {
     '2024-02-02': 'Groundhog Day',
     // ... añadir más días festivos según necesites
   };
+
+  appointmentForm = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    time: new FormControl('', [Validators.required]),
+    service: new FormControl('', [Validators.required]),
+    date: new FormControl('', [Validators.required])
+  });
+window: any;
 
   ngOnInit() {
     this.currentMonth = this.currentDate.getMonth();
@@ -124,25 +128,17 @@ export class CalendarComponent implements OnInit {
     this.generateCalendar();
   }
 
-  openAppointmentModal(day: any) {
+  setDate(day: any) {
     this.selectedDate = new Date(day.date + 'T00:00:00');
-    this.showModal = true;
+    this.appointmentForm.get('date')?.setValue(this.selectedDate.toISOString().split('T')[0]);
   }
 
-  closeModal() {
-    this.showModal = false;
-    this.appointment = {
-      name: '',
-      time: ''
-    };
+  cancelAppointment() {
+    this.appointmentForm.reset();
   }
 
   scheduleAppointment() {
     // Aquí implementarías la lógica para guardar la cita
-    console.log('Cita agendada:', {
-      date: this.selectedDate,
-      ...this.appointment
-    });
-    this.closeModal();
+    console.log(this.appointmentForm.value);
   }
 }
