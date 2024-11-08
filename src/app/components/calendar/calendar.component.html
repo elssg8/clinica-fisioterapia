@@ -1,6 +1,6 @@
 
 <!-- Formulario para agendar cita -->
-<div class="bg-gray-100 rounded-lg p-4 w-[500px] self-start my-10">
+<div class="bg-gray-100 rounded-lg p-4 w-[500px] items-center">
   <h2 class="text-2xl font-bold mb-4">Agendar Cita - {{appointmentForm.get('date')?.value | date:'d/M/yyyy'}}</h2>
 
   <form (ngSubmit)="scheduleAppointment()" [formGroup]="appointmentForm">
@@ -40,7 +40,7 @@
   </form>
 </div>
 
-<div class="flex flex-col self-start items-center bg-gradient-to-r from-pink-200 to-blue-200 my-10 rounded-lg">
+<div class="flex flex-col items-center bg-gradient-to-r from-pink-200 to-blue-200 rounded-lg">
   <div class="flex items-center gap-4 mt-2">
     <button (click)="previousMonth()" class="px-4 py-2 bg-white/50 rounded-lg hover:bg-white/70"><i class="fa-solid fa-arrow-left"></i></button>
     <h1 class="text-center pb-2 font-extrabold text-xl">{{monthName}} {{currentYear}}</h1>

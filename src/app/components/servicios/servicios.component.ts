@@ -154,7 +154,7 @@ export class ServiciosComponent {
     console.log('Agendar cita para:', this.imagenes[this.currentIndex].titulo);
     const calendarComponent = document.getElementById('calendar');
     if (calendarComponent) {
-      const offset = calendarComponent.offsetTop - 40; // Ajuste por el margen
+      const offset = calendarComponent.offsetTop - 25; // Ajuste por el margen
       window.scrollTo({
         top: offset,
         behavior: 'smooth'

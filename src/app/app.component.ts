@@ -6,10 +6,11 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ServiciosComponent } from './components/servicios/servicios.component';
 import { ServiciosCardsComponent } from './components/servicios-cards/servicios-cards.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
+import { MapsComponent } from './components/maps/maps.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavBarComponent, HeroSectionComponent, FooterComponent, ServiciosComponent, ServiciosCardsComponent, CalendarComponent],
+  imports: [RouterOutlet, NavBarComponent, HeroSectionComponent, FooterComponent, ServiciosComponent, ServiciosCardsComponent, CalendarComponent, MapsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

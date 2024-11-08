@@ -51,7 +51,7 @@ export class NavBarComponent {
   scrollToCalendar() {
     const calendarElement = document.getElementById('calendar');
     if (calendarElement) {
-      const offset = calendarElement.offsetTop - 40; // Ajuste por el margen
+      const offset = calendarElement.offsetTop - 25; // Ajuste por el margen
       window.scrollTo({
         top: offset,
         behavior: 'smooth'
@@ -67,6 +67,14 @@ export class NavBarComponent {
         top: offset,
         behavior: 'smooth'
       });
+    }
+  }
+
+  scrollToMaps() {
+    const mapsElement = document.getElementById('maps');
+    if (mapsElement) {
+      const offset = mapsElement.offsetTop;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
     }
   }
 }

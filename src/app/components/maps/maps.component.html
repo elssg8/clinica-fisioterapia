@@ -1,0 +1,20 @@
+
+<div class="w-[100%] h-[10%] flex flex-col items-center justify-center mt-12">
+  <h1 class="text-2xl font-bold">Ubicación</h1>
+</div>
+
+<div class="w-[100%] h-[50%]">
+  <google-map mapId="d3b9d30c0da2449d" height="100%" width="100%" [center]="center" [zoom]="zoom">
+    @for (position of advancedMarkerPositions; track position) {
+    <map-advanced-marker [position]="position" [options]="advancedMarkerOptions" />
+    }
+  </google-map>
+</div>
+
+<div class="w-[100%] h-auto flex flex-col items-center justify-center p-10">
+  <h1 class="text-2xl font-bold pb-2">Deus Fisioterapia</h1>
+  <p>Av. Revolución 123, Col. Centro, C.P. 50000, Toluca, México</p>
+  <p>Teléfono: 722 222 2222</p>
+  <p>Horario: Lunes a Sábado de 8:00 a 20:00</p>
+  <p>Correo electrónico: <span>clinicafisioterapia&#64;gmail.com</span></p>
+</div>
