@@ -48,14 +48,17 @@ export class CalendarComponent implements OnInit {
     'Dolor de espalda',
     'Paralisis Cerebral',
     'Incontinencia Urinaria',
-    'Masaje Descontracturante'
+    'Masaje Descontracturante',
+    'Tunel carpiano',
+    'Lesiones Nerviosas'
   ];
 
   appointmentForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     time: new FormControl('', [Validators.required]),
     service: new FormControl('', [Validators.required]),
-    date: new FormControl('', [Validators.required])
+    date: new FormControl('', [Validators.required]),
+    phone: new FormControl('', [Validators.required])
   });
   window: any;
 

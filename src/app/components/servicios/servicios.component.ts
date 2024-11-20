@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { AppointmentService } from '../../shared/appointment.service';
+
 interface ImagenServicio {
   url: string;
   titulo: string;
