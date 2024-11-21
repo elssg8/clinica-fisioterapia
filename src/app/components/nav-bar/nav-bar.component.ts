@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../shared/auth.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 interface NosotrosItem {
   title: string;
@@ -9,13 +12,31 @@ interface NosotrosItem {
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
 export class NavBarComponent {
   isLoggedIn = false;
   activeModal: NosotrosItem | null = null;
+  showLoginModal: boolean = false;
+  loginForm: FormGroup;
+  error: string = '';
+
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
+
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
 
   nosotrosItems: NosotrosItem[] = [
     {
@@ -36,10 +57,6 @@ export class NavBarComponent {
     },
   ];
 
-  toggleSession() {
-    this.isLoggedIn = !this.isLoggedIn;
-  }
-
   showModal(item: NosotrosItem) {
     this.activeModal = item;
   }
@@ -48,33 +65,62 @@ export class NavBarComponent {
     this.activeModal = null;
   }
 
-  scrollToCalendar() {
-    const calendarElement = document.getElementById('calendar');
-    if (calendarElement) {
-      const offset = calendarElement.offsetTop - 25; // Ajuste por el margen
-      window.scrollTo({
-        top: offset,
-        behavior: 'smooth'
+  scrollToSection(elementId: string) {
+    // Primero navegamos a la página principal si no estamos en ella
+    if (this.router.url !== '/') {
+      this.router.navigate(['/'], { fragment: elementId }).then(() => {
+        // Esperamos un momento para que el DOM se actualice
+        setTimeout(() => {
+          const element = document.getElementById(elementId);
+          if (element) {
+            const offset = element.offsetTop - 25;
+            window.scrollTo({
+              top: offset,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
       });
+    } else {
+      // Si ya estamos en la página principal, solo hacemos scroll
+      const element = document.getElementById(elementId);
+      if (element) {
+        const offset = element.offsetTop - 25;
+        window.scrollTo({
+          top: offset,
+          behavior: 'smooth'
+        });
+      }
     }
   }
 
-  scrollToServices() {
-    const serviciosElement = document.getElementById('servicios');
-    if (serviciosElement) {
-      const offset = serviciosElement.offsetTop; // Ajuste por el margen
-      window.scrollTo({
-        top: offset,
-        behavior: 'smooth'
-      });
+  toggleLoginModal() {
+    this.showLoginModal = !this.showLoginModal;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.isLoggedIn = false;
+    this.showLoginModal = false;
+  }
+
+  async onLogin() {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      try {
+        const success = await this.authService.login(email, password);
+        if (success) {
+          this.showLoginModal = false;
+          this.loginForm.reset();
+          this.router.navigate(['/']);
+        } else {
+          this.error = 'Credenciales inválidas';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        this.error = 'Error al iniciar sesión';
+      }
     }
   }
 
-  scrollToMaps() {
-    const mapsElement = document.getElementById('maps');
-    if (mapsElement) {
-      const offset = mapsElement.offsetTop;
-      window.scrollTo({ top: offset, behavior: 'smooth' });
-    }
-  }
 }

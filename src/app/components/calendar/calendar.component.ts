@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AppointmentService } from '../../shared/appointment.service';
+import { FirebaseService } from '../../shared/firebase.service';
 
 
 interface CalendarDay {
@@ -62,7 +63,7 @@ export class CalendarComponent implements OnInit {
   });
   window: any;
 
-  constructor(private appointmentService: AppointmentService) {
+  constructor(private appointmentService: AppointmentService, private firebaseService: FirebaseService) {
     this.appointmentService.selectedService$.subscribe(service => {
       if (service) {
         this.appointmentForm.get('service')?.setValue(service);
@@ -166,8 +167,30 @@ export class CalendarComponent implements OnInit {
     this.appointmentForm.reset();
   }
 
-  scheduleAppointment() {
-    // Aquí implementarías la lógica para guardar la cita
-    console.log(this.appointmentForm.value);
+  async scheduleAppointment() {
+    if (this.appointmentForm.valid) {
+      const formData = this.appointmentForm.value;
+
+      // Check if time slot is available
+      const isAvailable = await this.firebaseService.isTimeSlotAvailable(
+        formData.date as string,
+        formData.time as string
+      );
+
+      if (!isAvailable) {
+        alert('This time slot is already booked. Please select another time.');
+        return;
+      }
+
+      // Add appointment to Firebase
+      const result = await this.firebaseService.addAppointment(formData);
+
+      if (result.success) {
+        alert('Appointment scheduled successfully!');
+        this.appointmentForm.reset();
+      } else {
+        alert('Error scheduling appointment. Please try again.');
+      }
+    }
   }
 }

@@ -1,10 +1,13 @@
 <div class="app-container">
   <app-nav-bar class="fixed top-0 left-0 w-full z-50" id="nav"></app-nav-bar>
-  <app-hero-section class="h-[100vh]"></app-hero-section>
-  <!-- <app-servicios-cards class="my-10" id="servicios"></app-servicios-cards> -->
-  <app-servicios class="h-[100vh] flex flex-col items-center justify-center" id="servicios"></app-servicios>
-  <app-calendar class="h-[100vh] flex flex-row items-center justify-around" id="calendar"></app-calendar>
-  <app-maps class="h-[100vh] w-full flex flex-col items-center justify-center" id="maps"></app-maps>
+
+  <ng-container *ngIf="!isAdminRoute">
+    <app-hero-section class="h-[100vh]" id="hero-section"></app-hero-section>
+    <app-servicios class="h-[100vh] flex flex-col items-center justify-center" id="servicios"></app-servicios>
+    <app-calendar class="h-[100vh] flex flex-row items-center justify-around" id="agendar-cita"></app-calendar>
+    <app-maps class="h-[100vh] w-full flex flex-col items-center justify-center" id="ubicacion"></app-maps>
+  </ng-container>
+
   <router-outlet></router-outlet>
   <app-footer></app-footer>
 </div>
