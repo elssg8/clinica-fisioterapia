@@ -94,6 +94,21 @@ export class NavBarComponent {
     }
   }
 
+  scrollToTop() {
+    this.router.navigate(['/admin']).then(() => {
+      setTimeout(() => {
+        const element = document.getElementById('admin');
+        if (element) {
+          const offset = element.offsetTop - 70;
+          window.scrollTo({
+            top: offset,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    });
+  }
+
   toggleLoginModal() {
     this.showLoginModal = !this.showLoginModal;
   }

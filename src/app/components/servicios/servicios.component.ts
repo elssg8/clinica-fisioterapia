@@ -106,18 +106,6 @@ export class ServiciosComponent {
     }
   ];
 
-  /* @HostListener('wheel', ['$event'])
-  onWheel(event: WheelEvent) {
-    if (this.isMouseOverCarousel(event)) {
-      event.preventDefault();
-      if (event.deltaY > 0) {
-        this.next();
-      } else {
-        this.prev();
-      }
-    }
-  } */
-
   @HostListener('document:keyup', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'ArrowRight') {
@@ -153,7 +141,7 @@ export class ServiciosComponent {
   agendarCita() {
     this.appointmentService.setSelectedService(this.imagenes[this.currentIndex].titulo);
     console.log('Agendar cita para:', this.imagenes[this.currentIndex].titulo);
-    const calendarComponent = document.getElementById('calendar');
+    const calendarComponent = document.getElementById('agendar-cita');
     if (calendarComponent) {
       const offset = calendarComponent.offsetTop - 25; // Ajuste por el margen
       window.scrollTo({

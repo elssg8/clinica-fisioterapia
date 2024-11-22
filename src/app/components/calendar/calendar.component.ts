@@ -11,6 +11,7 @@ interface CalendarDay {
   holiday: string;
   isToday: boolean;
   isCurrentMonth: boolean;
+  appointmentCount: number;
 }
 
 @Component({
@@ -27,6 +28,11 @@ export class CalendarComponent implements OnInit {
   days: CalendarDay[] = [];
   monthName: string = '';
   selectedDate: Date | null = null;
+  availableTimes: string[] = ['09:00', '10:00', '11:00', '14:00', '15:00'];
+  bookedTimes: string[] = [];
+  showModal = false;
+  modalTitle = '';
+  modalMessage = '';
 
   // Lista de días festivos - esto podría venir de una API o base de datos
   holidays: Record<string, string> = {
@@ -71,28 +77,46 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.currentMonth = this.currentDate.getMonth();
     this.currentYear = this.currentDate.getFullYear();
     this.updateMonthName();
-    this.generateCalendar();
+    await this.generateCalendar();
   }
 
-  generateCalendar() {
+  async generateCalendar() {
     this.days = [];
     const firstDay = new Date(this.currentYear, this.currentMonth, 1);
     const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+
+    // Obtener todas las citas del mes de una sola vez
+    const startDate = new Date(this.currentYear, this.currentMonth - 1, 1).toISOString().split('T')[0];
+    const endDate = new Date(this.currentYear, this.currentMonth + 2, 0).toISOString().split('T')[0];
+    const monthAppointments = await this.firebaseService.getAppointmentsForDateRange(startDate, endDate);
+
+    // Crear un mapa de fechas con citas para búsqueda rápida
+    // Crea un mapa que cuenta cuántas citas hay en cada fecha
+    const appointmentsByDate = new Map<string, number>();
+    monthAppointments.forEach((appointment: any) => {
+      // Obtiene el número actual de citas para esa fecha (0 si no hay ninguna)
+      const count = appointmentsByDate.get(appointment.date) || 0;
+      // Incrementa el contador de citas para esa fecha
+      appointmentsByDate.set(appointment.date, count + 1);
+    });
 
     // Días del mes anterior
     const firstDayOfWeek = firstDay.getDay();
     for (let i = firstDayOfWeek - 1; i >= 0; i--) {
       const prevDate = new Date(this.currentYear, this.currentMonth, -i);
+      const dateString = prevDate.toISOString().split('T')[0];
+
       this.days.push({
-        date: prevDate.toISOString().split('T')[0],
+        date: dateString,
         day: prevDate.getDate(),
-        holiday: this.holidays[prevDate.toISOString().split('T')[0]] || 'No Holiday',
+        holiday: this.holidays[dateString] || 'No Holiday',
         isToday: this.isToday(prevDate),
-        isCurrentMonth: false // Días del mes anterior
+        isCurrentMonth: false,
+        appointmentCount: appointmentsByDate.get(dateString) || 0
       });
     }
 
@@ -106,7 +130,8 @@ export class CalendarComponent implements OnInit {
         day: i,
         holiday: this.holidays[dateString] || 'No Holiday',
         isToday: this.isToday(currentDate),
-        isCurrentMonth: true // Días del mes actual
+        isCurrentMonth: true,
+        appointmentCount: appointmentsByDate.get(dateString) || 0
       });
     }
 
@@ -114,12 +139,15 @@ export class CalendarComponent implements OnInit {
     const remainingDays = 35 - this.days.length;
     for (let i = 1; i <= remainingDays; i++) {
       const nextDate = new Date(this.currentYear, this.currentMonth + 1, i);
+      const dateString = nextDate.toISOString().split('T')[0];
+
       this.days.push({
-        date: nextDate.toISOString().split('T')[0],
+        date: dateString,
         day: nextDate.getDate(),
-        holiday: this.holidays[nextDate.toISOString().split('T')[0]] || 'No Holiday',
+        holiday: this.holidays[dateString] || 'No Holiday',
         isToday: this.isToday(nextDate),
-        isCurrentMonth: false // Días del mes siguiente
+        isCurrentMonth: false,
+        appointmentCount: appointmentsByDate.get(dateString) || 0
       });
     }
   }
@@ -158,9 +186,28 @@ export class CalendarComponent implements OnInit {
     this.generateCalendar();
   }
 
-  setDate(day: any) {
+  async setDate(day: any) {
     this.selectedDate = new Date(day.date + 'T00:00:00');
     this.appointmentForm.get('date')?.setValue(this.selectedDate.toISOString().split('T')[0]);
+
+    // Obtener las citas para esta fecha y actualizar los horarios disponibles
+    await this.updateAvailableTimes(this.selectedDate.toISOString().split('T')[0]);
+  }
+
+  async updateAvailableTimes(date: string) {
+    // Obtener las citas para esta fecha
+    const appointments = await this.firebaseService.getAppointmentsByDate(date);
+
+    // Obtener los horarios ya reservados
+    this.bookedTimes = appointments.map((app: any) => app.time);
+
+    // Resetear el valor del tiempo seleccionado
+    this.appointmentForm.get('time')?.setValue('');
+  }
+
+  // Método helper para verificar si un horario está disponible
+  isTimeAvailable(time: string): boolean {
+    return !this.bookedTimes.includes(time);
   }
 
   cancelAppointment() {
@@ -169,28 +216,48 @@ export class CalendarComponent implements OnInit {
 
   async scheduleAppointment() {
     if (this.appointmentForm.valid) {
-      const formData = this.appointmentForm.value;
+      try {
+        const formData = this.appointmentForm.value;
 
-      // Check if time slot is available
-      const isAvailable = await this.firebaseService.isTimeSlotAvailable(
-        formData.date as string,
-        formData.time as string
-      );
+        if (!formData.date || !formData.time) {
+          this.showModalMessage('Error', 'Por favor seleccione fecha y hora para la cita');
+          return;
+        }
 
-      if (!isAvailable) {
-        alert('This time slot is already booked. Please select another time.');
-        return;
-      }
+        const isAvailable = await this.firebaseService.isTimeSlotAvailable(
+          formData.date as string,
+          formData.time as string
+        );
 
-      // Add appointment to Firebase
-      const result = await this.firebaseService.addAppointment(formData);
+        if (!isAvailable) {
+          this.showModalMessage('Horario no disponible', 'Este horario ya no está disponible. Por favor seleccione otro.');
+          await this.updateAvailableTimes(formData.date as string);
+          return;
+        }
 
-      if (result.success) {
-        alert('Appointment scheduled successfully!');
+        await this.firebaseService.addAppointment(formData);
+
+        this.showModalMessage('¡Éxito!', '¡Cita agendada exitosamente!');
         this.appointmentForm.reset();
-      } else {
-        alert('Error scheduling appointment. Please try again.');
+        await this.updateAvailableTimes(formData.date as string);
+
+      } catch (error) {
+        console.error('Error al agendar la cita:', error);
+        this.showModalMessage('Error', 'Error al agendar la cita. Por favor intente nuevamente.');
       }
+    } else {
+      this.showModalMessage('Error', 'Por favor complete todos los campos requeridos');
     }
+  }
+
+  // Agregar estos métodos
+  showModalMessage(title: string, message: string) {
+    this.modalTitle = title;
+    this.modalMessage = message;
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
   }
 }

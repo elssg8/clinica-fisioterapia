@@ -27,7 +27,7 @@
           <li class="text-center"><a (click)="scrollToSection('agendar-cita')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Agendar cita</a></li>
           <li class="text-center"><a (click)="scrollToSection('ubicacion')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Ubicación</a></li>
           <li class="text-center" *ngIf="isLoggedIn">
-            <a routerLink="/admin" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl">
+            <a (click)="scrollToTop()" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl cursor-pointer">
               <i class="fa-solid fa-gear px-2"></i>
               Admin
             </a>

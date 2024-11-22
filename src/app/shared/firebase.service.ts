@@ -54,4 +54,16 @@ export class FirebaseService {
       return [];
     }
   }
+
+  async getAppointmentsForDateRange(startDate: string, endDate: string) {
+    const appointmentsRef = collection(this.firestore, 'appointments');
+    const q = query(
+      appointmentsRef,
+      where('date', '>=', startDate),
+      where('date', '<=', endDate)
+    );
+
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => doc.data());
+  }
 }
