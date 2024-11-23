@@ -12,12 +12,12 @@ import { GoogleMap, MapAdvancedMarker } from '@angular/google-maps';
 export class MapsComponent {
 
 
-  center: google.maps.LatLngLiteral = {lat: 19.282935264861035, lng: -99.67661382948894};
-  zoom = 16;
+  center: google.maps.LatLngLiteral = {lat: 19.25147659883843, lng: -99.70381354282799};
+  zoom = 15;
   advancedMarkerOptions: google.maps.marker.AdvancedMarkerElementOptions = {gmpDraggable: false};
   advancedMarkerPositions: google.maps.LatLngLiteral[] = [
-    { lat: 19.282935264861035, lng: -99.67661382948894 }
+    { lat: 19.25147659883843, lng: -99.70381354282799 }
   ];
-
+  
 
 }

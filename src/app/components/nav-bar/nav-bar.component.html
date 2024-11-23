@@ -1,4 +1,4 @@
-<nav class="bg-[var(--primary-color)]">
+<nav class="bg-[var(--accent-hover-color)]">
     <div class="mx-0 px-0">
       <div class="flex justify-between items-center">
         <a (click)="scrollToSection('hero-section')" class="w-[100px] px-1 text-xl font-bold py-4">LOGO</a>
@@ -8,12 +8,12 @@
 
           <!-- Dropdown con hover -->
           <li class="text-center group relative">
-            <a class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl cursor-pointer px-4">Nosotros</a>
+            <a class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-[var(--accent-color)] w-auto text-sm sm:text-base md:text-lg lg:text-xl cursor-pointer px-4">Nosotros</a>
             <!-- Lista del Dropdown, visible al hacer hover -->
-            <ul class="absolute hidden bg-[var(--primary-color)] shadow-lg group-hover:block z-50">
+            <ul class="absolute hidden bg-[var(--accent-hover-color)] shadow-lg group-hover:block z-50">
               <li *ngFor="let item of nosotrosItems">
                 <a href="#"
-                   class="block py-1 lg:py-1 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4"
+                   class="block py-1 lg:py-1 text-white font-semibold uppercase tracking-wider hover:text-[var(--accent-color)] w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4"
                    (mouseenter)="showModal(item)"
                    (mouseleave)="hideModal()">
                   {{ item.title }}
@@ -23,17 +23,17 @@
           </li>
 
           <!-- Otros ítems del menú -->
-          <li class="text-center"><a (click)="scrollToSection('servicios')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Servicios</a></li>
-          <li class="text-center"><a (click)="scrollToSection('agendar-cita')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Agendar cita</a></li>
-          <li class="text-center"><a (click)="scrollToSection('ubicacion')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Ubicación</a></li>
+          <li class="text-center"><a (click)="scrollToSection('servicios')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-[var(--accent-color)] w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Servicios</a></li>
+          <li class="text-center"><a (click)="scrollToSection('agendar-cita')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-[var(--accent-color)] w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Agendar cita</a></li>
+          <li class="text-center"><a (click)="scrollToSection('ubicacion')" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-[var(--accent-color)] w-auto text-sm sm:text-base md:text-lg lg:text-xl px-4 cursor-pointer">Ubicación</a></li>
           <li class="text-center" *ngIf="isLoggedIn">
-            <a (click)="scrollToTop()" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto text-sm sm:text-base md:text-lg lg:text-xl cursor-pointer">
+            <a (click)="scrollToTop()" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-[var(--accent-color)] w-auto text-sm sm:text-base md:text-lg lg:text-xl cursor-pointer">
               <i class="fa-solid fa-gear px-2"></i>
               Admin
             </a>
           </li>
           <li class="text-center relative">
-            <a (click)="toggleLoginModal()" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-gray-500 w-auto hover:bg-gray-100 cursor-pointer text-sm sm:text-base md:text-lg lg:text-xl px-4">
+            <a (click)="toggleLoginModal()" class="block py-2 lg:py-4 text-white font-semibold uppercase tracking-wider hover:text-[var(--accent-color)] w-auto hover:bg-gray-100 cursor-pointer text-sm sm:text-base md:text-lg lg:text-xl px-4">
               <i class="fa-solid fa-user px-2"></i>
               {{ isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión' }}
             </a>
@@ -48,7 +48,7 @@
      class="fixed w-full h-full flex items-center justify-center z-10 object-cover bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm transition-opacity duration-300 ease-in-out"
      (mouseenter)="showModal(activeModal)"
      (mouseleave)="hideModal()">
-  <div class="bg-[var(--primary-color)] p-10 shadow-xl w-[800px] h-[400px]">
+  <div class="bg-[var(--background-color)] p-10 shadow-xl w-[800px] h-[400px] rounded-lg">
     <h2 class="text-4xl font-bold mb-6 font-merienda">{{ activeModal.title }}</h2>
     <p class="text-2xl font-light tracking-wide text-justify">{{ activeModal.content }}</p>
   </div>

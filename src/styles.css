@@ -5,15 +5,17 @@
 @tailwind utilities;
 
 :root {
-  --primary-color: #6fa7a2;
-  --secondary-color: #dcefee;
-  --mint-color: #97c4b7;
-  --lila-color: #c4afea;
+  --primary-color: #66ab85;
+  --secondary-color: #c1e6ba;
+  --background-color: #e2e7e2;
+  --accent-color: #023336;
+  --accent-hover-color: #5a7779;
+  --modal-color: #eaf8e7;
   --agendar-color: #9db3ad;
   --agendar-hover-color: #839b94;
   --calendar-color: #c5dad5;
   --calendar-hover-color: #97c4b7;
-  --form-color: #bfd5d0;
+  --form-color: #a8babd;
 }
 
 
@@ -24,7 +26,7 @@ html, body {
   }
 
   body {
-    background-color: var(--secondary-color);
+    background-color: var(--background-color);
     display: flex;
     flex-direction: column;
   }

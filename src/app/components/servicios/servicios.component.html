@@ -46,15 +46,15 @@
 <!-- Carousel -->
 <div class="w-[1200px] mx-auto">
   <!-- Carousel Body -->
-  <div class="relative rounded-lg block md:flex items-center bg-gray-100 shadow-xl" style="min-height: 19rem;">
-    <div class="relative w-full md:w-2/5 h-full overflow-hidden rounded-t-lg md:rounded-t-none md:rounded-l-lg" style="min-height: 19rem;">
+  <div class="relative rounded-lg block md:flex items-center bg-gray-100 shadow-xl" style="min-height: 25rem;">
+    <div class="relative w-full md:w-2/5 h-full overflow-hidden rounded-lg" style="min-height: 25rem;">
       <img class="absolute inset-0 w-full h-full object-cover object-center" [ngSrc]="imagenes[currentIndex].url" [alt]="imagenes[currentIndex].titulo" width="800" height="600" priority>
     </div>
     <div class="w-full md:w-3/5 h-full flex items-center bg-gray-100 rounded-lg">
       <div class="p-12 md:pr-24 md:pl-16 md:py-12">
         <h2 class="text-4xl font-bold mb-4 font-poiret-one">{{imagenes[currentIndex].titulo}}</h2>
         <p class="text-gray-600">{{imagenes[currentIndex].descripcion}}</p>
-        <button (click)="agendarCita()" class="mt-6 bg-[var(--agendar-color)] hover:bg-[var(--agendar-hover-color)] text-white font-bold py-2 px-4 rounded">
+        <button (click)="agendarCita()" class="mt-6 bg-[var(--accent-hover-color)] hover:bg-[var(--accent-color)] text-white font-bold py-2 px-4 rounded">
           Agendar Cita
         </button>
       </div>
@@ -65,13 +65,13 @@
     <button
       (click)="prev()"
       [class.cursor-not-allowed]="currentIndex === 0"
-      class="absolute top-0 mt-32 left-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-[var(--agendar-color)] hover:text-[var(--agendar-hover-color)] -ml-6 focus:outline-none focus:shadow-outline">
+      class="absolute top-0 mt-44 left-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-[var(--accent-hover-color)] hover:text-[var(--accent-color)] -ml-6 focus:outline-none focus:shadow-outline">
       <span class="block" style="transform: scale(-1);">&#x279c;</span>
     </button>
     <button
       (click)="next()"
       [class.cursor-not-allowed]="currentIndex === imagenes.length - 1"
-      class="absolute top-0 mt-32 right-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-[var(--agendar-color)] hover:text-[var(--agendar-hover-color)] -mr-6 focus:outline-none focus:shadow-outline">
+      class="absolute top-0 mt-44 right-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-[var(--accent-hover-color)] hover:text-[var(--accent-color)] -mr-6 focus:outline-none focus:shadow-outline">
       <span class="block">&#x279c;</span>
     </button>
   </div>
