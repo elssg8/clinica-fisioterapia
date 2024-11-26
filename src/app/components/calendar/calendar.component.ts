@@ -196,10 +196,26 @@ export class CalendarComponent implements OnInit {
   }
 
   async setDate(day: any) {
-    this.selectedDate = new Date(day.date + 'T00:00:00');
+    const selectedDate = new Date(day.date + 'T00:00:00');
+    const today = new Date();
+    
+    // Reset time portion for accurate day comparison
+    today.setHours(0, 0, 0, 0);
+    
+    // Calculate minimum required date (2 days from today)
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 1);
+    
+    if (selectedDate < minDate) {
+      this.showModalMessage(
+        'Fecha no válida', 
+        'Las citas deben programarse con al menos 2 días de anticipación.'
+      );
+      return;
+    }
+  
+    this.selectedDate = selectedDate;
     this.appointmentForm.get('date')?.setValue(this.selectedDate.toISOString().split('T')[0]);
-
-    // Obtener las citas para esta fecha y actualizar los horarios disponibles
     await this.updateAvailableTimes(this.selectedDate.toISOString().split('T')[0]);
   }
 
@@ -210,10 +226,18 @@ export class CalendarComponent implements OnInit {
     // Actualizar availableTimes según el día de la semana
     this.availableTimes = this.availableTimesByDay[dayOfWeek];
     
+    // Si es el día actual + 2, filtrar las horas que ya pasaron
+    const today = new Date();
+    if (selectedDate.toDateString() === new Date(today.setDate(today.getDate() + 2)).toDateString()) {
+      const currentHour = new Date().getHours();
+      this.availableTimes = this.availableTimes.filter(time => {
+        const timeHour = parseInt(time.split(':')[0]);
+        return timeHour > currentHour;
+      });
+    }
+    
     // Obtener las citas para esta fecha
     const appointments = await this.firebaseService.getAppointmentsByDate(date);
-    
-    // Obtener los horarios ya reservados
     this.bookedTimes = appointments.map((app: any) => app.time);
     
     // Resetear el valor del tiempo seleccionado

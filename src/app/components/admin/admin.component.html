@@ -1,82 +1,115 @@
 <div class="admin-container mt-20 p-8 min-h-[90vh]" id="admin">
-  <h1 class="text-3xl font-bold mb-6">Panel de Administración</h1>
+  <div class="flex flex-row gap-48">
+    <h1 class="text-3xl font-bold mb-6">Panel de Administración</h1>
 
-  <!-- Filtros -->
-  <form [formGroup]="filterForm" class="mb-6 flex gap-4">
-    <div class="flex items-center gap-2">
-      <label>Filtrar por:</label>
-      <select formControlName="filterType" 
-              class="border rounded p-2">
-        <option value="all">Todas las citas</option>
-        <option value="day">Día</option>
-        <option value="week">Semana</option>
-        <option value="month">Mes</option>
-      </select>
-    </div>
+    <!-- Filtros -->
+    <form [formGroup]="filterForm" class="mb-6 flex gap-4">
+      <div class="flex items-center gap-2">
+        <label>Filtrar por:</label>
+        <select formControlName="filterType" 
+                class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-[--accent-color]">
+          <option value="all">Todas las citas</option>
+          <option value="day">Día</option>
+          <option value="week">Semana</option>
+          <option value="month">Mes</option>
+        </select>
+      </div>
 
-    <div *ngIf="filterForm.get('filterType')?.value !== 'all'" 
-         class="flex items-center gap-2">
-      <input type="date" 
-             formControlName="selectedDate"
-             class="border rounded p-2">
-    </div>
-  </form>
+      <div *ngIf="filterForm.get('filterType')?.value !== 'all'" 
+           class="flex items-center gap-2">
+        <input type="date" 
+               formControlName="selectedDate"
+               class="border rounded p-2 bg-[--modal-color] focus:outline-none focus:ring-2 focus:ring-[--accent-color]">
+      </div>
+
+      <div class="flex items-center gap-2">
+        <input type="checkbox" 
+               formControlName="showCompleted"
+               id="showCompleted"
+               class="rounded accent-[--accent-color]">
+        <label for="showCompleted">Mostrar citas completadas</label>
+      </div>
+    </form>
+  </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Solicitudes Pendientes -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">Solicitudes Pendientes</h2>
-      <div class="space-y-4 max-h-[600px] overflow-y-auto">
-        <div *ngFor="let request of pendingRequests" 
-             class="border p-4 rounded-lg hover:bg-gray-50 transition-colors">
-          <h3 class="font-semibold">{{request.name}}</h3>
-          <p>Servicio: {{request.service}}</p>
-          <p>Fecha: {{request.date | date:'dd/MM/yyyy'}}</p>
-          <p>Hora: {{request.time}}</p>
-          <p>Teléfono: {{request.phone}}</p>
-          <div class="flex gap-2 mt-2">
-            <button (click)="acceptRequest(request.id)" 
-                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
-              Aceptar
-            </button>
-            <button (click)="rejectRequest(request.id)"
-                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">
-              Rechazar
-            </button>
+    <div class="bg-[--background-color] p-6 rounded-lg flex flex-col h-[75vh]">
+      <h2 class="text-xl font-semibold mb-4 text-[--accent-color]">Solicitudes Pendientes</h2>
+      <div class="flex-1 overflow-y-auto">
+        <div class="space-y-4">
+          <div *ngFor="let request of pendingRequests" 
+               class="border border-[--accent-color] p-4 rounded-lg hover:bg-[--calendar-hover-color] transition-colors">
+            <h3 class="font-semibold">{{request.name}}</h3>
+            <p>Servicio: {{request.service}}</p>
+            <p>Fecha: {{request.date | date:'dd/MM/yyyy'}}</p>
+            <p>Hora: {{request.time}}</p>
+            <p>Teléfono: {{request.phone}}</p>
+            <div class="flex gap-2 mt-2">
+              <button (click)="acceptRequest(request.id)" 
+                      class="bg-[--accent-hover-color] text-white px-4 py-2 rounded hover:bg-[--accent-color] transition-colors">
+                Aceptar
+              </button>
+              <button (click)="rejectRequest(request.id)"
+                      class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-900 transition-colors">
+                Rechazar
+              </button>
+            </div>
           </div>
-        </div>
-        <div *ngIf="pendingRequests.length === 0" 
-             class="text-center text-gray-500 py-4">
-          No hay solicitudes pendientes
+          <div *ngIf="pendingRequests.length === 0" 
+               class="text-center text-gray-500 py-4">
+            No hay solicitudes pendientes
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Citas Programadas -->
-    <div class="bg-white p-6 rounded-lg shadow-md col-span-2">
-      <h2 class="text-xl font-semibold mb-4">Citas Programadas</h2>
-      <div class="space-y-4 max-h-[600px] overflow-y-auto">
-        <div *ngFor="let appointment of filteredAppointments" 
-             class="border p-4 rounded-lg hover:bg-gray-50 transition-colors">
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="font-semibold">{{appointment.name}}</h3>
-              <p>Servicio: {{appointment.service}}</p>
-              <p>Fecha: {{appointment.date | date:'dd/MM/yyyy'}}</p>
-              <p>Hora: {{appointment.time}}</p>
-              <p>Teléfono: {{appointment.phone}}</p>
+    <div class="bg-[--background-color] p-6 rounded-lg col-span-2 flex flex-col h-[75vh]">
+      <h2 class="text-xl font-semibold mb-4 text-[--accent-color]">Citas Programadas</h2>
+      <div class="flex-1 overflow-y-auto">
+        <div class="space-y-4">
+          <div *ngFor="let appointment of filteredAppointments" 
+               class="border p-4 rounded-lg hover:bg-[--calendar-hover-color] border-[--accent-color] transition-colors">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-semibold">{{appointment.name}}</h3>
+                <p>Servicio: {{appointment.service}}</p>
+                <p>Fecha: {{appointment.date | date:'dd/MM/yyyy'}}</p>
+                <p>Hora: {{appointment.time}}</p>
+                <p>Teléfono: {{appointment.phone}}</p>
+              </div>
+              <span [ngClass]="getStatusClass(appointment.date, appointment.time)"
+                    class="px-2 py-1 rounded text-sm">
+                {{getAppointmentStatus(appointment.date, appointment.time)}}
+              </span>
             </div>
-            <span [ngClass]="getStatusClass(appointment.date, appointment.time)"
-                  class="px-2 py-1 rounded text-sm">
-              {{getAppointmentStatus(appointment.date, appointment.time)}}
-            </span>
+          </div>
+          <div *ngIf="filteredAppointments.length === 0" 
+               class="text-center text-gray-500 py-4">
+            No hay citas programadas para el período seleccionado
           </div>
         </div>
-        <div *ngIf="filteredAppointments.length === 0" 
-             class="text-center text-gray-500 py-4">
-          No hay citas programadas para el período seleccionado
-        </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de notificación -->
+<div *ngIf="showModal" 
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-[--background-color] p-8 rounded-xl shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300 ease-in-out hover:scale-105">
+    <div class="text-center">
+      <div [ngClass]="modalConfig.success ? 'text-[--primary-color]' : 'text-red-500'" 
+           class="text-7xl mb-6 animate-bounce">
+        <i [class]="modalConfig.success ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'"></i>
+      </div>
+      <h3 class="text-2xl font-bold mb-4 text-[--accent-color]">{{modalConfig.title}}</h3>
+      <p class="text-gray-700 text-lg mb-8">{{modalConfig.message}}</p>
+      <button (click)="closeModal()" 
+              class="bg-[--accent-hover-color] text-white px-8 py-3 rounded-lg hover:bg-[--accent-color] transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg text-lg font-semibold">
+        Aceptar
+      </button>
     </div>
   </div>
 </div>

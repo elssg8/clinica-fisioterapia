@@ -3,6 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FirebaseService } from '../../shared/firebase.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
+interface ModalConfig {
+  title: string;
+  message: string;
+  success: boolean;
+}
+
 @Component({
   selector: 'app-admin',
   standalone: true,
@@ -16,6 +22,12 @@ export class AdminComponent implements OnInit {
   appointments: any[] = [];
   filteredAppointments: any[] = [];
   filterForm: FormGroup;
+  showModal = false;
+  modalConfig: ModalConfig = {
+    title: '',
+    message: '',
+    success: true
+  };
 
   constructor(
     private firebaseService: FirebaseService,
@@ -23,7 +35,8 @@ export class AdminComponent implements OnInit {
   ) {
     this.filterForm = this.fb.group({
       filterType: ['all'],
-      selectedDate: [new Date().toISOString().split('T')[0]]
+      selectedDate: [new Date().toISOString().split('T')[0]],
+      showCompleted: [true]
     });
   }
 
@@ -48,39 +61,46 @@ export class AdminComponent implements OnInit {
     }
   
     updateDateFilter() {
-      const { filterType, selectedDate } = this.filterForm.value;
+      const { filterType, selectedDate, showCompleted } = this.filterForm.value;
       const selectedDateObj = new Date(selectedDate);
+      let filtered = [...this.appointments];
       
+      // Primero aplicamos el filtro de fecha
       switch (filterType) {
         case 'all':
-          this.filteredAppointments = [...this.appointments];
           break;
-        
         case 'day':
-          this.filteredAppointments = this.appointments.filter(app => {
+          filtered = filtered.filter(app => {
             const appDate = new Date(app.date);
             return this.isSameDay(appDate, selectedDateObj);
           });
           break;
-        
         case 'week':
-          this.filteredAppointments = this.appointments.filter(app => {
+          filtered = filtered.filter(app => {
             const appDate = new Date(app.date);
             return this.isInSameWeek(appDate, selectedDateObj);
           });
           break;
-        
         case 'month':
-          this.filteredAppointments = this.appointments.filter(app => {
+          filtered = filtered.filter(app => {
             const appDate = new Date(app.date);
             return appDate.getMonth() === selectedDateObj.getMonth() &&
                    appDate.getFullYear() === selectedDateObj.getFullYear();
           });
           break;
       }
-  
+    
+      // Luego aplicamos el filtro de citas completadas
+      if (!showCompleted) {
+        filtered = filtered.filter(app => {
+          const appointmentDate = new Date(`${app.date} ${app.time}`);
+          const now = new Date();
+          return appointmentDate >= now;
+        });
+      }
+    
       // Ordenar por fecha y hora
-      this.filteredAppointments.sort((a, b) => {
+      this.filteredAppointments = filtered.sort((a, b) => {
         const dateA = new Date(`${a.date} ${a.time}`);
         const dateB = new Date(`${b.date} ${b.time}`);
         return dateA.getTime() - dateB.getTime();
@@ -103,12 +123,15 @@ export class AdminComponent implements OnInit {
     getAppointmentStatus(date: string, time: string): string {
       const appointmentDate = new Date(`${date} ${time}`);
       const now = new Date();
-  
+
       if (appointmentDate < now) {
         return 'Completada';
-      } else if (this.isToday(new Date(date))) {
-        return 'Hoy';
       } else {
+        const today = new Date();
+        // Comparar directamente con today usando isSameDay
+        if (this.isSameDay(appointmentDate, today)) {
+          return 'Hoy';
+        }
         return 'Próxima';
       }
     }
@@ -130,19 +153,25 @@ export class AdminComponent implements OnInit {
       return this.isSameDay(date, today);
     }
   
-    async acceptRequest(requestId: string) {
-      const request = this.pendingRequests.find(r => r.id === requestId);
-      if (request) {
-        const isAvailable = await this.firebaseService.isTimeSlotAvailable(
-          request.date,
-          request.time
-        );
-  
-        if (!isAvailable) {
-          alert('Este horario ya no está disponible');
-          return;
-        }
-  
+    
+  async acceptRequest(requestId: string) {
+    const request = this.pendingRequests.find(r => r.id === requestId);
+    if (request) {
+      const isAvailable = await this.firebaseService.isTimeSlotAvailable(
+        request.date,
+        request.time
+      );
+
+      if (!isAvailable) {
+        this.showModalMessage({
+          title: 'Horario No Disponible',
+          message: 'Este horario ya no está disponible',
+          success: false
+        });
+        return;
+      }
+
+      try {
         await this.firebaseService.addAppointment({
           name: request.name,
           service: request.service,
@@ -150,15 +179,51 @@ export class AdminComponent implements OnInit {
           time: request.time,
           phone: request.phone
         });
-  
+
         await this.firebaseService.updateRequestStatus(requestId, 'accepted');
         await this.loadRequests();
         await this.loadAllAppointments();
+
+        this.showModalMessage({
+          title: 'Cita Aceptada',
+          message: 'La cita ha sido agendada correctamente',
+          success: true
+        });
+      } catch (error) {
+        this.showModalMessage({
+          title: 'Error',
+          message: 'Ocurrió un error al agendar la cita',
+          success: false
+        });
       }
     }
-  
-    async rejectRequest(requestId: string) {
+  }
+
+  async rejectRequest(requestId: string) {
+    try {
       await this.firebaseService.updateRequestStatus(requestId, 'rejected');
       await this.loadRequests();
+      
+      this.showModalMessage({
+        title: 'Cita Rechazada',
+        message: 'La solicitud ha sido rechazada',
+        success: false
+      });
+    } catch (error) {
+      this.showModalMessage({
+        title: 'Error',
+        message: 'Ocurrió un error al rechazar la solicitud',
+        success: false
+      });
     }
+  }
+
+  showModalMessage(config: ModalConfig) {
+    this.modalConfig = config;
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
 }

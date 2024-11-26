@@ -145,11 +145,13 @@ export class NavBarComponent {
         } else {
           this.error = 'Credenciales inválidas';
           this.showErrorModal = true; // Mostrar modal de error
+          this.loginForm.reset();
         }
       } catch (error) {
         console.error('Login error:', error);
         this.error = 'Error al iniciar sesión';
         this.showErrorModal = true; // Mostrar modal de error
+        this.loginForm.reset();
       }
     }
   }
