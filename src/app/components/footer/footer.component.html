@@ -4,15 +4,14 @@
     <div class="flex w-full sm:w-1/3 text-center items-center justify-center text-md">
       <h3 class="w-[fit-content]">Síguenos en nuestras redes sociales</h3>
       <div class="flex justify-center space-x-4 pl-4">
-        <a href="#" class="text-white hover:text-gray-300 rounded-full border-2 w-10 h-10 flex items-center justify-center"><i class="fab fa-facebook-f text-xl "></i></a>
-        <a href="#" class="text-white hover:text-gray-300 rounded-full border-2 w-10 h-10 flex items-center justify-center"><i class="fab fa-tiktok text-xl"></i></a>
-        <a href="#" class="text-white hover:text-gray-300 rounded-full border-2 w-10 h-10 flex items-center justify-center"><i class="fab fa-instagram text-xl"></i></a>
+        <a href="https://www.facebook.com/FisioterapiaDeus?mibextid=ZbWKwL" target="_blank" class="text-white hover:text-gray-300 rounded-full border-2 w-10 h-10 flex items-center justify-center"><i class="fab fa-facebook-f text-xl "></i></a>
+        <a href="https://www.instagram.com/deusfisio/profilecard/?igsh=bmhydmptcGo4a29v" target="_blank" class="text-white hover:text-gray-300 rounded-full border-2 w-10 h-10 flex items-center justify-center"><i class="fab fa-instagram text-xl"></i></a>
       </div>
     </div>
 
     <div class="flex w-full sm:w-1/3 justify-around text-md">
-      <a href="#" class="text-white hover:text-gray-300 text-center">Términos y condiciones</a>
-      <a href="#" class="text-white hover:text-gray-300 text-center">Aviso de privacidad</a>
+      <a href="#" class="text-white hover:text-gray-300 text-center" (click)="openTermsModal($event)">Términos y condiciones</a>
+      <a href="#" class="text-white hover:text-gray-300 text-center" (click)="openPrivacyModal($event)">Aviso de privacidad</a>
     </div>
 
     <div class="w-full sm:w-1/3 text-center items-center justify-center text-sm">
@@ -20,3 +19,30 @@
     </div>
   </div>
 </footer>
+
+
+<!-- Modal -->
+<div *ngIf="showTermsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white text-black p-6 rounded-lg max-w-2xl mx-4">
+    <h2 class="text-xl font-bold mb-4">Términos y Condiciones</h2>
+    <div class="text-sm mb-4 max-h-96 overflow-y-auto">
+      <p class="mb-4">{{ termsAndConditions }}</p>
+    </div>
+    <button (click)="closeTermsModal()" class="bg-[var(--accent-hover-color)] text-white px-4 py-2 rounded hover:opacity-90">
+      Cerrar
+    </button>
+  </div>
+</div>
+
+<!-- Privacy Modal -->
+<div *ngIf="showPrivacyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white text-black p-6 rounded-lg max-w-2xl mx-4">
+    <h2 class="text-xl font-bold mb-4">Aviso de Privacidad</h2>
+    <div class="text-sm mb-4 max-h-96 overflow-y-auto">
+      <p class="mb-4">{{ privacyNotice }}</p>
+    </div>
+    <button (click)="closePrivacyModal()" class="bg-[var(--accent-hover-color)] text-white px-4 py-2 rounded hover:opacity-90">
+      Cerrar
+    </button>
+  </div>
+</div>

@@ -28,7 +28,16 @@ export class CalendarComponent implements OnInit {
   days: CalendarDay[] = [];
   monthName: string = '';
   selectedDate: Date | null = null;
-  availableTimes: string[] = ['09:00', '10:00', '11:00', '14:00', '15:00'];
+  availableTimes: string[] = [];
+  availableTimesByDay: Record<number, string[]> = {
+    0: ['10:00', '11:00', '12:00', '13:00', '14:00', '16:00', '17:00', '18:00', '19:00'], // Domingo - Lunes
+    1: ['10:00', '11:00', '12:00', '13:00'], // Lunes - Martes
+    2: ['10:00', '11:00', '12:00', '13:00', '14:00', '16:00', '17:00', '18:00', '19:00'], // Martes - Miércoles
+    3: ['10:00', '11:00', '12:00', '13:00'], // Miércoles - Jueves
+    4: ['10:00', '11:00', '12:00', '13:00'], // Jueves - Viernes
+    5: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'], // Viernes - Sábado
+    6: [], // Sábado - Domingo (cerrado)
+  };
   bookedTimes: string[] = [];
   showModal = false;
   modalTitle = '';
@@ -195,12 +204,18 @@ export class CalendarComponent implements OnInit {
   }
 
   async updateAvailableTimes(date: string) {
+    const selectedDate = new Date(date);
+    const dayOfWeek = selectedDate.getDay();
+    
+    // Actualizar availableTimes según el día de la semana
+    this.availableTimes = this.availableTimesByDay[dayOfWeek];
+    
     // Obtener las citas para esta fecha
     const appointments = await this.firebaseService.getAppointmentsByDate(date);
-
+    
     // Obtener los horarios ya reservados
     this.bookedTimes = appointments.map((app: any) => app.time);
-
+    
     // Resetear el valor del tiempo seleccionado
     this.appointmentForm.get('time')?.setValue('');
   }
@@ -218,32 +233,32 @@ export class CalendarComponent implements OnInit {
     if (this.appointmentForm.valid) {
       try {
         const formData = this.appointmentForm.value;
-
+  
         if (!formData.date || !formData.time) {
           this.showModalMessage('Error', 'Por favor seleccione fecha y hora para la cita');
           return;
         }
-
+  
         const isAvailable = await this.firebaseService.isTimeSlotAvailable(
           formData.date as string,
           formData.time as string
         );
-
+  
         if (!isAvailable) {
           this.showModalMessage('Horario no disponible', 'Este horario ya no está disponible. Por favor seleccione otro.');
           await this.updateAvailableTimes(formData.date as string);
           return;
         }
-
-        await this.firebaseService.addAppointment(formData);
-
-        this.showModalMessage('¡Éxito!', '¡Cita agendada exitosamente!');
+  
+        await this.firebaseService.addRequest(formData);
+  
+        this.showModalMessage('¡Éxito!', '¡Solicitud enviada exitosamente! Espere la confirmación.');
         this.appointmentForm.reset();
         await this.updateAvailableTimes(formData.date as string);
-
+  
       } catch (error) {
-        console.error('Error al agendar la cita:', error);
-        this.showModalMessage('Error', 'Error al agendar la cita. Por favor intente nuevamente.');
+        console.error('Error al enviar la solicitud:', error);
+        this.showModalMessage('Error', 'Error al enviar la solicitud. Por favor intente nuevamente.');
       }
     } else {
       this.showModalMessage('Error', 'Por favor complete todos los campos requeridos');

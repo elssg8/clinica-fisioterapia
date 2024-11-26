@@ -22,6 +22,8 @@ export class NavBarComponent {
   showLoginModal: boolean = false;
   loginForm: FormGroup;
   error: string = '';
+  showSuccessModal: boolean = false;
+  showErrorModal: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -119,6 +121,14 @@ export class NavBarComponent {
     this.showLoginModal = false;
   }
 
+  closeSuccessModal() {
+    this.showSuccessModal = false;
+  }
+
+  closeErrorModal() {
+    this.showErrorModal = false;
+  }
+
   async onLogin() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
@@ -127,13 +137,19 @@ export class NavBarComponent {
         if (success) {
           this.showLoginModal = false;
           this.loginForm.reset();
-          this.router.navigate(['/']);
+          this.showSuccessModal = true; // Mostrar modal de éxito
+          setTimeout(() => {
+            this.showSuccessModal = false;
+            this.router.navigate(['/']);
+          }, 2000);
         } else {
           this.error = 'Credenciales inválidas';
+          this.showErrorModal = true; // Mostrar modal de error
         }
       } catch (error) {
         console.error('Login error:', error);
         this.error = 'Error al iniciar sesión';
+        this.showErrorModal = true; // Mostrar modal de error
       }
     }
   }

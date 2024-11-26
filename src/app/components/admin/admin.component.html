@@ -1,20 +1,82 @@
-<div class="admin-container mt-20 p-8 h-[90vh]" id="admin">
+<div class="admin-container mt-20 p-8 min-h-[90vh]" id="admin">
   <h1 class="text-3xl font-bold mb-6">Panel de Administración</h1>
+
+  <!-- Filtros -->
+  <form [formGroup]="filterForm" class="mb-6 flex gap-4">
+    <div class="flex items-center gap-2">
+      <label>Filtrar por:</label>
+      <select formControlName="filterType" 
+              class="border rounded p-2">
+        <option value="all">Todas las citas</option>
+        <option value="day">Día</option>
+        <option value="week">Semana</option>
+        <option value="month">Mes</option>
+      </select>
+    </div>
+
+    <div *ngIf="filterForm.get('filterType')?.value !== 'all'" 
+         class="flex items-center gap-2">
+      <input type="date" 
+             formControlName="selectedDate"
+             class="border rounded p-2">
+    </div>
+  </form>
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Add your admin panels/cards here -->
+    <!-- Solicitudes Pendientes -->
     <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Solicitudes Pendientes</h2>
+      <div class="space-y-4 max-h-[600px] overflow-y-auto">
+        <div *ngFor="let request of pendingRequests" 
+             class="border p-4 rounded-lg hover:bg-gray-50 transition-colors">
+          <h3 class="font-semibold">{{request.name}}</h3>
+          <p>Servicio: {{request.service}}</p>
+          <p>Fecha: {{request.date | date:'dd/MM/yyyy'}}</p>
+          <p>Hora: {{request.time}}</p>
+          <p>Teléfono: {{request.phone}}</p>
+          <div class="flex gap-2 mt-2">
+            <button (click)="acceptRequest(request.id)" 
+                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+              Aceptar
+            </button>
+            <button (click)="rejectRequest(request.id)"
+                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">
+              Rechazar
+            </button>
+          </div>
+        </div>
+        <div *ngIf="pendingRequests.length === 0" 
+             class="text-center text-gray-500 py-4">
+          No hay solicitudes pendientes
+        </div>
+      </div>
+    </div>
+
+    <!-- Citas Programadas -->
+    <div class="bg-white p-6 rounded-lg shadow-md col-span-2">
       <h2 class="text-xl font-semibold mb-4">Citas Programadas</h2>
-      <!-- Add content -->
-    </div>
-
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">Gestión de Servicios</h2>
-      <!-- Add content -->
-    </div>
-
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">Configuración</h2>
-      <!-- Add content -->
+      <div class="space-y-4 max-h-[600px] overflow-y-auto">
+        <div *ngFor="let appointment of filteredAppointments" 
+             class="border p-4 rounded-lg hover:bg-gray-50 transition-colors">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="font-semibold">{{appointment.name}}</h3>
+              <p>Servicio: {{appointment.service}}</p>
+              <p>Fecha: {{appointment.date | date:'dd/MM/yyyy'}}</p>
+              <p>Hora: {{appointment.time}}</p>
+              <p>Teléfono: {{appointment.phone}}</p>
+            </div>
+            <span [ngClass]="getStatusClass(appointment.date, appointment.time)"
+                  class="px-2 py-1 rounded text-sm">
+              {{getAppointmentStatus(appointment.date, appointment.time)}}
+            </span>
+          </div>
+        </div>
+        <div *ngIf="filteredAppointments.length === 0" 
+             class="text-center text-gray-500 py-4">
+          No hay citas programadas para el período seleccionado
+        </div>
+      </div>
     </div>
   </div>
 </div>
